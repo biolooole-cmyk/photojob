@@ -461,6 +461,10 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
       </div>
       <div class="loc-list" id="locList"></div>
     </div>
+    <div class="sec" id="spaceFrameSection" style="display:none">
+      <div class="sec-label">📷 Кадр пространства <span class="cnt" id="spaceFrameCnt"></span> <span style="font-size:10px;color:#bbb;font-weight:400;text-transform:none;letter-spacing:0">— необязательно</span></div>
+      <div class="choice-group" id="spaceFrameList"></div>
+    </div>
     <div class="custom-block">
       <div class="custom-label">✏️ Свои пожелания к локации</div>
       <textarea class="custom-inp" id="custom-loc" placeholder="Добавится к выбранной локации в той же секции промпта. Например: 'идёт дождь', 'осенние листья на земле'. Можно заполнить вместо выбора локации." oninput="updatePrompt()"></textarea>
@@ -81060,7 +81064,111 @@ LOC.push(
    "Книга открыта, читает первую страницу — first page standing",
    "Смотрит в камеру, книга в руке — book hand camera shelf portrait"]
 });;;;;
-const state = {loc:null, makeup:null, outfit:null, hair:null, pose:null, camera:null, hands:null, decollete:false};
+// ═══════════════════════════════════════════════════════════════════════════
+// CAMERA SPACE DESCRIPTIONS — intimate background fragments by category
+// ═══════════════════════════════════════════════════════════════════════════
+const CAMERA_SPACES = {
+  'интерьер': [
+    "A corner of a living room with part of a sofa and a tall window section with a curtain falling freely to the floor — the architecture of the room implied beyond the frame.",
+    "A section of wall with a built-in niche, integrated shelving at varying heights, and a fragment of the parquet floor at its base.",
+    "A fragment of an open-plan kitchen with the edge of a stone countertop, a row of upper cabinets and part of the tiled backsplash behind — the space quiet and composed.",
+    "Part of a corridor with a doorway leading into an adjacent room, the frame slightly visible, and a fragment of a flush built-in panel to one side.",
+    "A corner of a study or working space with part of a wide desk surface and a vertical wall panel immediately behind it — materials refined, lines clean.",
+    "A fragment of a staircase landing with metal or timber handrails and the first few steps ascending out of frame — the structure of the home revealed in section.",
+    "A section of wall with an oversized framed mirror and part of a low console beneath it — the reflection shows only the room's depth, nothing specific.",
+    "A balcony door ajar, its full-height glass panel and part of the frame visible, the exterior space beyond reduced to an out-of-focus plane.",
+    "A corner of a reception room with part of an armchair and a slender floor lamp beside it — the surrounding space recedes into ambient depth.",
+    "A fragment of a dining space with the edge of a long table and a section of the panelled wall immediately behind it — formal without being austere.",
+    "A section of a bathroom with the edge of a freestanding basin, an oval mirror mounted above it and a portion of the tiled wall to one side.",
+    "Part of an entrance hall with a wall-mounted coat rail, a doorway ahead and a section of floor with a geometric surface treatment near the threshold."
+  ],
+  'дом': [
+    "A portion of a bedroom with an upholstered headboard, a bedside table at its side and a section of the wall behind them — the domestic scale evident, the details familiar.",
+    "A corner of a living room with part of a sofa, a windowsill and the window frame with a sheer curtain — morning or afternoon light implied by the pale surface quality.",
+    "A fragment of a kitchen with an L-shaped countertop, an inset sink and part of the tiled splashback — household detail without event or action.",
+    "A section of a hallway with a mirror mounted on the wall, a clothes rack to one side and a portion of floor near the front door.",
+    "Part of a home bathroom with the edge of a bathtub or shower enclosure and a section of the tiled wall — surfaces slightly worn, domestic and honest.",
+    "A corner of a balcony or loggia with part of the parapet and a fragment of the view beyond — the threshold between inside and outside.",
+    "A fragment of a bedroom with a textured headboard panel and part of the bedside table below a wall-mounted light — the room quiet and composed.",
+    "A section of a home staircase with timber treads and part of the balustrade descending out of frame — the private architecture of movement through the house.",
+    "Part of a home library or study with the edge of a bookshelf and a section of a work surface at its side — the domestic intellectual space.",
+    "A corner of a living room with part of a media unit, a low cabinet beneath it and a section of the floor covering — the room's functional centre.",
+    "A fragment of a personal room with part of a bed frame, a windowsill and the curtain rail above — the surface textures quiet and lived-in.",
+    "Part of a kitchen-dining area with the corner of a dining table, one chair tucked in and a section of the wall behind — the scale domestic, the mood unhurried."
+  ],
+  'город': [
+    "A section of a city street with a fragment of a masonry building facade and a portion of paved footpath — the urban grain specific without being identifiable.",
+    "A corner of a pedestrian district with a shop window and part of the entrance group beside it — the commercial city in its most composed form.",
+    "A fragment of a narrow urban lane with a brick wall running the length of the frame and part of a metal gate at its edge — the city's back side.",
+    "Part of the facade of a residential building with a balcony element and a section of the cornice above it — the elevation as background, the scale implied.",
+    "A corner of an urban square with part of a bench, a section of paving with a distinct material or pattern and a vertical architectural element nearby.",
+    "A fragment of a retail street with part of a glazed shopfront, an entrance door frame and a section of pavement at its base.",
+    "A section of a city bridge or embankment with part of the stone or metal parapet and an open urban space receding behind it.",
+    "Part of a covered passage or underground link with an arch and a section of tiled or stone-clad wall — the city's interior infrastructure as setting.",
+    "A corner of a public square with part of a column or architectural element and a fragment of the stone paving around its base.",
+    "A fragment of a cafe or restaurant terrace as seen from outside — part of the screening, a section of the adjacent facade, a portion of the street-level pavement.",
+    "A section of a multi-storey urban structure — a car park, a gallery or a covered market — with part of a structural column and a section of the perforated or louvred facade.",
+    "A corner of a covered market or city arcade with part of a trading structure and a fragment of the roof element above it."
+  ],
+  'отель': [
+    "A corner of a hotel room with the headboard, part of the bedside panel and a section of the wall behind — the room anonymous but calibrated, every surface considered.",
+    "A fragment of a hotel corridor with a doorway, part of a decorative wall panel and a section of the flooring pattern running toward it.",
+    "Part of a hotel lobby with a reception desk fragment or part of the stone-clad wall behind it — the institutional scale of the public ground floor.",
+    "A corner of a lobby seating area with part of an armchair, a low table and a fragment of a vertical decorative element — the public lounge in its quieter register.",
+    "A fragment of a hotel bathroom with a freestanding tub and a section of fully tiled wall — the surface quality high, the composition deliberate.",
+    "Part of a room balcony with a section of the parapet railing and a neutral open space beyond — the exterior of the building implied without being shown.",
+    "A corner of a meeting room or board room with part of a long table and a section of wall with an acoustic or decorative panel.",
+    "A fragment of a staircase lobby with part of a balustrade, a tread section and a portion of stone or plaster wall beside it — the circulation architecture of a considered building.",
+    "Part of a spa or relaxation zone with a fragment of a lounger and a section of a screen or partition — the space defined by its materials and proportions.",
+    "A corner of a hotel restaurant with part of a table, a section of upholstered seating back and a section of the wall behind — the dining room between services.",
+    "A fragment of a minibar or desk area in a room with the edge of the work surface and part of a mirror mounted above it — the serviced room in its domestic-adjacent mode.",
+    "Part of a hotel terrace with a fragment of the balustrade, a section of outdoor furniture and the neutral depth of open space behind."
+  ],
+  'тусовка': [
+    "A corner of a bar or venue with part of a bar counter, the edge of a high stool and a fragment of the wall behind — the space set up but not yet in use.",
+    "A fragment of a lounge area with part of a low sofa, a side table and a section of a decorative feature wall — the hospitality interior in its off-peak state.",
+    "Part of an entrance group of a club or venue with a doorway and a fragment of the facade treatment beside it — the threshold between street and interior.",
+    "A corner of a private apartment used for an event with part of the dining table and a section of the open kitchen visible behind it.",
+    "A fragment of a rooftop or terrace with part of the parapet structure and a neutral open volume of space beyond it.",
+    "Part of a photo zone or decorative installation with a fragment of the backdrop element and a section of the floor surface in front.",
+    "A corner of a covered terrace with part of the timber decking, a section of the railing and the depth of exterior space behind it.",
+    "A fragment of a venue interior with part of a raised platform or stage edge and a section of the space to one side of it.",
+    "Part of a club or restaurant corridor with a doorway at its end and a decorative niche set into the wall to one side.",
+    "A corner of a chill-out zone with part of a large floor cushion or pouf and a section of a patterned rug beneath it — the informal interior.",
+    "A fragment of a bar back with part of the glass shelving, the edge of the bar counter surface and a section of mirror behind the bottles.",
+    "Part of an open-air venue with a fragment of a pergola or stretched canopy structure and a section of the paved floor beneath."
+  ],
+  'портрет': [
+    "A neutral section of a textured plaster wall — no decoration, no furniture, only the surface and its specific material quality filling the frame.",
+    "A fragment of a room with part of a doorway on one side and a plain wall surface beside it — two planes meeting at the edge of the frame.",
+    "A corner where two walls meet at a right angle, the floor junction visible at the base — the geometry of a room distilled to its minimum.",
+    "Part of a staircase landing with a fragment of the handrail and a section of a smooth painted wall immediately beside it.",
+    "A fragment of an arched opening with part of the reveal visible and a plain surface receding through it.",
+    "A section of exposed brick or rough-plastered wall — the material the sole point of interest, the scale human, the depth shallow.",
+    "Part of a balcony with the edge of the parapet and an open volume of neutral exterior space behind it — light from above and to one side.",
+    "A corner of an architectural volume where two surfaces meet, the base plane visible, one surface catching more light than the other.",
+    "A fragment of a wall niche with part of the side wall and the back plane in shadow — a shallow architectural depth.",
+    "A section of building facade with a small decorative detail and a plain uninterrupted wall surface running beside it.",
+    "Part of a corridor in perspective with receding parallel walls and a plain floor surface beneath — the tunnel of the space as compositional structure.",
+    "A fragment of a glazed partition with part of the frame visible and a neutral interior depth readable through the glass."
+  ],
+  'жизнь': [
+    "A corner of a car park with a fragment of a concrete column and a section of painted floor markings — the functional architecture of the city's infrastructure.",
+    "Part of a petrol station with a fragment of the canopy structure, the edge of a pump and a section of the asphalt around it.",
+    "A fragment of a shopping centre atrium with part of a staircase, the void of the atrium behind it and a section of the polished floor.",
+    "A corner of a pharmacy, supermarket or shop interior with part of a shelving unit and a fragment of the checkout zone in the background.",
+    "Part of a transport hub — station or airport — with a section of a waiting lounge, rows of seating and a section of the overhead structure.",
+    "A corner of a gym or dance studio with part of the equipment, a mirrored wall and a section of the specialised floor surface.",
+    "A fragment of a medical facility or office with part of the reception counter and a section of the cladded wall behind it.",
+    "Part of a lift lobby with the face of the lift doors, the call button panel and a section of the surrounding wall finish.",
+    "A corner of a business centre or corporate lobby with part of a glass partition and a fragment of a reception desk at the edge of frame.",
+    "A fragment of a cinema or cultural institution with part of the entrance group structure and a section of the foyer inside.",
+    "Part of a park or pedestrian zone with a section of the path surface, the edge of a bench and a portion of a low barrier or railing.",
+    "A corner of a market or outdoor fair with part of a trading structure, a fragment of an awning above it and a section of the pavement below."
+  ]
+};
+
+const state = {loc:null, makeup:null, outfit:null, hair:null, pose:null, camera:null, hands:null, decollete:false, space:null};
 let history = []; // saved prompts (max 7, saved on copy)
 const extras = new Set();
 const accItems = new Set();
@@ -81132,6 +81240,7 @@ function randomize() {
   state.camera = Math.floor(Math.random() * CAM.length);
   state.hands  = null;
   state.decollete = false;
+  state.space  = null;
   extras.clear();
   accItems.clear();
   ['loc','makeup','outfit','hair','pose','camera','acc','hands','extras'].forEach(k => {
@@ -81139,6 +81248,7 @@ function randomize() {
     if (el) el.value = '';
   });
   renderLoc();
+  renderSpaceFrameList();
   renderMakeupList();
   renderOutfitList();
   renderPoseList();
@@ -81189,9 +81299,37 @@ function init() {
     renderMakeupList();
     renderOutfitList();
     renderPoseList();
+    renderSpaceFrameList();
   }
   renderHistory();
   updateProgress();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CAMERA SPACE FRAME
+// ═══════════════════════════════════════════════════════════════════════════
+function renderSpaceFrameList() {
+  const sec = document.getElementById('spaceFrameSection');
+  const el  = document.getElementById('spaceFrameList');
+  if (!sec || !el) return;
+  if (state.loc === null) { sec.style.display = 'none'; return; }
+  const cat = LOC[state.loc].c;
+  const spaces = CAMERA_SPACES[cat];
+  if (!spaces || spaces.length === 0) { sec.style.display = 'none'; return; }
+  sec.style.display = '';
+  document.getElementById('spaceFrameCnt').textContent = spaces.length + ' вар.';
+  el.innerHTML = '';
+  spaces.forEach((text, i) => {
+    const d = document.createElement('div');
+    d.className = 'card' + (state.space === i ? ' sel' : '');
+    d.innerHTML = `<div class="card-num">Кадр ${i+1}</div>${text}`;
+    d.addEventListener('click', () => {
+      state.space = (state.space === i) ? null : i;
+      el.querySelectorAll('.card').forEach((c, j) => c.classList.toggle('sel', j === state.space));
+      updatePrompt();
+    });
+    el.appendChild(d);
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -81242,6 +81380,7 @@ function selectLoc(i) {
   state.pose   = null;
   state.hands  = null;
   state.decollete = false;
+  state.space  = null;
   // state.camera сохраняется (как допы и аксессуары)
 
   // Clear custom fields except camera, extras and acc
@@ -81251,6 +81390,7 @@ function selectLoc(i) {
 
   // Re-render all dependent tabs
   renderLoc();
+  renderSpaceFrameList();
   renderMakeupList();
   renderOutfitList();
   renderHairList();
@@ -81679,6 +81819,12 @@ function updatePrompt() {
   const accTexts = [...accItems].sort().map(i => ACC[i].t);
   const handsText = state.hands !== null ? HANDS[state.hands].t : null;
 
+  // Camera space frame — optional background fragment
+  const cat = item.c;
+  const spacesForCat = CAMERA_SPACES[cat];
+  const spaceFrameText = (state.space !== null && spacesForCat && spacesForCat[state.space])
+    ? spacesForCat[state.space] : null;
+
   // Custom fields — if filled, REPLACE the selection; if empty, use selection
   const cLoc    = (document.getElementById('custom-loc')   ?.value || '').trim();
   const cMakeup = (document.getElementById('custom-makeup')?.value || '').trim();
@@ -81691,7 +81837,7 @@ function updatePrompt() {
   const cExtras = (document.getElementById('custom-extras')?.value || '').trim();
 
   // Resolve each field: selection is used as-is; custom wish appends WITHIN the same section
-  const finalLoc    = item.bg + (cLoc    ? ` ${cLoc}`    : '');
+  const finalLoc    = item.bg + (spaceFrameText ? ` FRAME DETAIL: ${spaceFrameText}` : '') + (cLoc ? ` ${cLoc}` : '');
   const finalMakeup = (mk    || '') + (cMakeup ? ` ${cMakeup}` : '');
   const decolleteText = state.decollete ? ' IMPORTANT: The outfit must also feature a very deep neckline or low-cut décolleté that prominently showcases the woman\'s large, beautiful, natural breasts — generous, tasteful but unmistakable cleavage.' : '';
   const finalOutfit = (ot || '') + (cOutfit ? ` ${cOutfit}` : '') + decolleteText;
