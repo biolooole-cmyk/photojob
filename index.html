@@ -406,6 +406,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
   <div class="hdr-right">
     <span class="hdr-stat" id="statLoc">— локаций</span>
     <span class="hdr-stat">7 вкладок</span>
+    <button class="btn btn-ghost" onclick="randomize()" style="background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.25);font-size:11px;padding:4px 11px" title="Выбрать всё случайно">🎲 Случайный</button>
   </div>
 </div>
 
@@ -482,6 +483,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
   <div class="tab-pane" id="tab-outfit">
     <div class="sec">
       <div class="sec-label">Одежда <span class="cnt" id="otCnt"></span> <span style="font-size:10px;color:#e05;font-weight:500">обязательно</span></div>
+      <input class="search-inp" id="outfitSearch" type="text" placeholder="🔍 Поиск одежды..." oninput="renderOutfitList()">
       <div class="choice-group" id="outfitList"><div class="empty-hint">Сначала выберите локацию</div></div>
     </div>
     <div class="custom-block">
@@ -510,6 +512,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
         <span class="legend-item"><span class="pill pill-s">📱 SELFIE</span> selfie</span>
         <span class="legend-item"><span class="pill pill-m">🪞 ЗЕРКАЛО</span> mirror</span>
       </div>
+      <input class="search-inp" id="poseSearch" type="text" placeholder="🔍 Поиск позы..." oninput="renderPoseList()">
       <div class="choice-group" id="poseList"><div class="empty-hint">Сначала выберите локацию</div></div>
     </div>
     <div class="custom-block">
@@ -81064,6 +81067,94 @@ const accItems = new Set();
 let activeCat = 'all';
 
 // ═══════════════════════════════════════════════════════════════════════════
+// LOCALSTORAGE PERSISTENCE
+// ═══════════════════════════════════════════════════════════════════════════
+const LS_STATE   = 'ppb_state_v2';
+const LS_HISTORY = 'ppb_history_v2';
+const LS_CUSTOMS = 'ppb_customs_v2';
+
+function saveState() {
+  try {
+    localStorage.setItem(LS_STATE, JSON.stringify({
+      loc: state.loc, makeup: state.makeup, outfit: state.outfit,
+      hair: state.hair, pose: state.pose, camera: state.camera,
+      hands: state.hands, decollete: state.decollete,
+      extras: [...extras], accItems: [...accItems]
+    }));
+    localStorage.setItem(LS_HISTORY, JSON.stringify(history));
+    const customs = {};
+    ['loc','makeup','outfit','hair','pose','camera','acc','hands','extras'].forEach(k => {
+      const el = document.getElementById('custom-' + k);
+      if (el) customs[k] = el.value;
+    });
+    localStorage.setItem(LS_CUSTOMS, JSON.stringify(customs));
+  } catch(e) {}
+}
+
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(LS_STATE) || 'null');
+    if (saved) {
+      Object.assign(state, {
+        loc: saved.loc ?? null, makeup: saved.makeup ?? null,
+        outfit: saved.outfit ?? null, hair: saved.hair ?? null,
+        pose: saved.pose ?? null, camera: saved.camera ?? null,
+        hands: saved.hands ?? null, decollete: saved.decollete ?? false
+      });
+      if (Array.isArray(saved.extras)) saved.extras.forEach(i => extras.add(i));
+      if (Array.isArray(saved.accItems)) saved.accItems.forEach(i => accItems.add(i));
+    }
+    const savedHistory = JSON.parse(localStorage.getItem(LS_HISTORY) || '[]');
+    if (Array.isArray(savedHistory)) history.push(...savedHistory);
+    const customs = JSON.parse(localStorage.getItem(LS_CUSTOMS) || 'null');
+    if (customs) {
+      Object.keys(customs).forEach(k => {
+        const el = document.getElementById('custom-' + k);
+        if (el) el.value = customs[k] || '';
+      });
+    }
+  } catch(e) {}
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// RANDOMIZE
+// ═══════════════════════════════════════════════════════════════════════════
+function randomize() {
+  if (!LOC.length) return;
+  const locIdx = Math.floor(Math.random() * LOC.length);
+  state.loc = locIdx;
+  const item = LOC[locIdx];
+  state.makeup = Math.floor(Math.random() * item.mk.length);
+  state.outfit = Math.floor(Math.random() * item.ot.length);
+  state.hair   = Math.floor(Math.random() * HAIR.length);
+  const allPoses = [...item.po, ...SPECIAL_POSES];
+  state.pose   = Math.floor(Math.random() * allPoses.length);
+  state.camera = Math.floor(Math.random() * CAM.length);
+  state.hands  = null;
+  state.decollete = false;
+  extras.clear();
+  accItems.clear();
+  ['loc','makeup','outfit','hair','pose','camera','acc','hands','extras'].forEach(k => {
+    const el = document.getElementById('custom-' + k);
+    if (el) el.value = '';
+  });
+  renderLoc();
+  renderMakeupList();
+  renderOutfitList();
+  renderPoseList();
+  renderHairList();
+  renderCameraList();
+  renderAccList();
+  renderExtrasList();
+  updateHandsTabState();
+  updateProgress();
+  updatePrompt();
+  // Auto-show prompt
+  const promptOut = document.getElementById('promptOut');
+  if (promptOut && promptOut.style.display === 'none') togglePrompt();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════════════════════════
 function init() {
@@ -81076,14 +81167,30 @@ function init() {
       renderLoc();
     });
   });
+  // Escape key closes all sliding windows
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      ['histWindow','smartWindow','colorWindow','fashionWindow','interiorWindow','spaceWindow','makeupGuideWindow'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('open');
+      });
+    }
+  });
   document.getElementById('negBody').textContent = NEG_DISPLAY;
   document.getElementById('statLoc').textContent = LOC.length + ' локаций';
+  loadState();
   renderLoc();
   renderHairList();
   renderCameraList();
   renderAccList();
   updateHandsTabState();
   renderExtrasList();
+  if (state.loc !== null) {
+    renderMakeupList();
+    renderOutfitList();
+    renderPoseList();
+  }
+  renderHistory();
   updateProgress();
 }
 
@@ -81210,15 +81317,18 @@ function renderOutfitList() {
     document.getElementById('otCnt').textContent = '';
     return;
   }
-  document.getElementById('otCnt').textContent = (item.ot.length + 1) + ' вар.';
+  const outfitQ = (document.getElementById('outfitSearch')?.value || '').trim().toLowerCase();
+  const filteredOt = item.ot.map((opt, i) => ({opt, i})).filter(({opt}) => !outfitQ || opt.toLowerCase().includes(outfitQ));
+  document.getElementById('otCnt').textContent = filteredOt.length + (outfitQ ? ' найдено' : ` вар.`);
   el.innerHTML = '';
-  item.ot.forEach((opt, i) => {
+  filteredOt.forEach(({opt, i}) => {
     const d = document.createElement('div');
     d.className = 'card' + (state.outfit === i ? ' sel' : '');
     d.innerHTML = `<div class="card-num">Вариант ${i+1}</div>${opt}`;
     d.addEventListener('click', () => {
       state.outfit = i;
-      el.querySelectorAll('.card').forEach((c,j) => c.classList.toggle('sel', j===i));
+      el.querySelectorAll('.card').forEach(c => c.classList.remove('sel'));
+      d.classList.add('sel');
       updateProgress(); updatePrompt();
     });
     el.appendChild(d);
@@ -81264,9 +81374,15 @@ function renderPoseList() {
   }
   const allPoses = [...item.po, ...SPECIAL_POSES];
   const regCount = item.po.length;
-  document.getElementById('pzCnt').textContent = (allPoses.length + 1) + ' вар.';
+  const poseQ = (document.getElementById('poseSearch')?.value || '').trim().toLowerCase();
+  const filteredPoses = allPoses.map((opt, i) => ({opt, i})).filter(({opt}) => {
+    if (!poseQ) return true;
+    const text = typeof opt === 'object' ? opt.t : opt;
+    return text.toLowerCase().includes(poseQ);
+  });
+  document.getElementById('pzCnt').textContent = poseQ ? `${filteredPoses.length} найдено` : `${allPoses.length + 1} вар.`;
   el.innerHTML = '';
-  allPoses.forEach((opt, i) => {
+  filteredPoses.forEach(({opt, i}) => {
     const isObj = typeof opt === 'object';
     const text = isObj ? opt.t : opt;
     const kind = isObj ? opt.s : null;
@@ -81278,7 +81394,8 @@ function renderPoseList() {
     d.innerHTML = `<div class="card-num">${numLabel}${pill}</div>${text}`;
     d.addEventListener('click', () => {
       state.pose = i;
-      el.querySelectorAll('.card').forEach((c,j) => c.classList.toggle('sel', j===i));
+      el.querySelectorAll('.card').forEach(c => c.classList.remove('sel'));
+      d.classList.add('sel');
       updateHandsTabState();
       updateProgress();
       updatePrompt();
@@ -81658,6 +81775,7 @@ function updatePrompt() {
   badge.className    = isReady ? 'badge-ready' : 'badge-wait';
   counter.textContent = prompt.length.toLocaleString('ru') + ' символов';
   copyBtn.disabled   = !isReady;
+  saveState();
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
