@@ -82903,7 +82903,7 @@ const CAMERA_SPACES = {
   ]
 };
 
-const state = {loc:null, makeup:null, outfit:null, hair:null, pose:null, camera:null, hands:null, decollete:false, space:null};
+const state = {loc:null, makeup:null, outfit:null, hair:null, pose:null, poses:new Set(), camera:null, hands:null, decollete:false, space:null};
 let history = []; // saved prompts (max 7, saved on copy)
 const extras = new Set();
 const accItems = new Set();
@@ -82972,6 +82972,7 @@ function randomize() {
   state.hair   = Math.floor(Math.random() * HAIR.length);
   const allPoses = [...item.po, ...SPECIAL_POSES];
   state.pose   = Math.floor(Math.random() * allPoses.length);
+  state.poses  = new Set([state.pose]);
   state.camera = Math.floor(Math.random() * CAM.length);
   state.hands  = null;
   state.decollete = false;
@@ -83113,6 +83114,7 @@ function selectLoc(i) {
   state.outfit = null;
   state.hair   = null;
   state.pose   = null;
+  state.poses  = new Set();
   state.hands  = null;
   state.decollete = false;
   state.space  = null;
@@ -83272,23 +83274,49 @@ function renderPoseList() {
     const text = typeof opt === 'object' ? opt.t : opt;
     return text.toLowerCase().includes(poseQ);
   });
+  const selectedCount = state.poses.size;
   document.getElementById('pzCnt').textContent = poseQ ? `${filteredPoses.length} найдено` : `${allPoses.length + 1} вар.`;
+  // hint label
+  let hint = document.getElementById('poseMultiHint');
+  if (!hint) {
+    hint = document.createElement('div');
+    hint.id = 'poseMultiHint';
+    hint.style.cssText = 'font-size:11px;color:#888;margin-bottom:6px;padding:0 2px';
+    el.parentNode.insertBefore(hint, el);
+  }
+  hint.textContent = selectedCount === 0 ? 'Выберите 1 или 2 позы'
+                   : selectedCount === 1 ? 'Выбрана 1 поза — можно добавить ещё одну'
+                   : 'Выбраны 2 позы — нажмите ещё раз чтобы снять';
   el.innerHTML = '';
   filteredPoses.forEach(({opt, i}) => {
     const isObj = typeof opt === 'object';
     const text = isObj ? opt.t : opt;
     const kind = isObj ? opt.s : null;
     const d = document.createElement('div');
-    d.className = 'card' + (state.pose === i ? ' sel' : '');
+    const isSel = state.poses.has(i);
+    d.className = 'card' + (isSel ? ' sel' : '');
     const numLabel = i < regCount ? `Вариант ${i+1}` : '';
     const pill = kind === 'selfie' ? '<span class="pill pill-s">📱 SELFIE</span>'
                 : kind === 'mirror' ? '<span class="pill pill-m">🪞 ЗЕРКАЛО</span>'
                 : kind === 'flirt'  ? '<span class="pill pill-f">💋 ФЛИРТ</span>' : '';
-    d.innerHTML = `<div class="card-num">${numLabel}${pill}</div>${text}`;
+    const badge = isSel && state.poses.size === 2
+      ? `<span style="float:right;font-size:10px;background:#d1fae5;color:#065f46;border-radius:4px;padding:1px 5px">${[...state.poses].indexOf(i) === 0 ? '1я' : '2я'}</span>`
+      : '';
+    d.innerHTML = `<div class="card-num">${numLabel}${pill}${badge}</div>${text}`;
     d.addEventListener('click', () => {
-      state.pose = i;
-      el.querySelectorAll('.card').forEach(c => c.classList.remove('sel'));
-      d.classList.add('sel');
+      if (state.poses.has(i)) {
+        state.poses.delete(i);
+      } else if (state.poses.size < 2) {
+        state.poses.add(i);
+      } else {
+        // replace oldest (first) with new
+        const first = [...state.poses][0];
+        state.poses.delete(first);
+        state.poses.add(i);
+      }
+      // legacy compat: state.pose = first selected or null
+      state.pose = state.poses.size > 0 ? [...state.poses][0] : null;
+      renderPoseList();
       updateHandsTabState();
       updateProgress();
       updatePrompt();
@@ -83298,13 +83326,13 @@ function renderPoseList() {
   // Custom card
   const custom = document.createElement('div');
   const cField = document.getElementById('custom-pose');
-  const isCustomActive = state.pose === null && cField && cField.value.trim().length > 0;
+  const isCustomActive = state.poses.size === 0 && cField && cField.value.trim().length > 0;
   custom.className = 'card custom-card' + (isCustomActive ? ' sel' : '');
   custom.innerHTML = `<div class="card-num">✏️ Своё</div>Написать свою позу в поле ниже`;
   custom.addEventListener('click', () => {
+    state.poses.clear();
     state.pose = null;
-    el.querySelectorAll('.card').forEach(c => c.classList.remove('sel'));
-    custom.classList.add('sel');
+    renderPoseList();
     const f = document.getElementById('custom-pose');
     if (f) { f.focus(); f.select(); }
     updateHandsTabState();
@@ -83413,12 +83441,12 @@ function renderAccList() {
 // HANDS
 // ═══════════════════════════════════════════════════════════════════════════
 function isHandsBlocked() {
-  if (state.pose === null) return false;
+  if (state.poses.size === 0 && state.pose === null) return false;
   const item = state.loc !== null ? LOC[state.loc] : null;
   if (!item) return false;
   const allPoses = [...item.po, ...SPECIAL_POSES];
-  const pObj = allPoses[state.pose];
-  return typeof pObj === 'object' && (pObj.s === 'selfie' || pObj.s === 'mirror');
+  const indices = state.poses.size > 0 ? [...state.poses] : [state.pose];
+  return indices.every(idx => { const o = allPoses[idx]; return typeof o === 'object' && (o.s === 'selfie' || o.s === 'mirror'); });
 }
 
 function updateHandsTabState() {
@@ -83521,8 +83549,8 @@ function updateProgress() {
      label: (item && state.outfit === 9999) ? '💋 Декольте' : (item && state.decollete && state.outfit !== null) ? item.ot[state.outfit].substring(0,18)+' 💋' : (item && state.outfit !== null) ? item.ot[state.outfit].substring(0,22) : (cOutfit ? 'Своя одежда' : 'Одежда')},
     {id:'ps-hair',   val: state.hair   !== null || cHair   ? true : null,
      label: state.hair !== null ? HAIR[state.hair].l.substring(0,18) : (cHair ? 'Своя причёска' : 'Причёска')},
-    {id:'ps-pose',   val: state.pose   !== null || cPose   ? true : null,
-     label: state.pose !== null ? 'Выбрана' : (cPose ? 'Своя поза' : 'Поза')},
+    {id:'ps-pose',   val: state.poses.size > 0 || state.pose !== null || cPose ? true : null,
+     label: state.poses.size === 2 ? '2 позы' : state.poses.size === 1 ? 'Выбрана' : (cPose ? 'Своя поза' : 'Поза')},
     {id:'ps-camera', val: state.camera !== null || cCamera ? true : null,
      label: state.camera !== null ? CAM[state.camera].l.substring(0,18) : (cCamera ? 'Своя камера' : 'Камера')},
     {id:'ps-acc',    val: accItems.size > 0 ? true : null,
@@ -83565,7 +83593,10 @@ function updatePrompt() {
   const mk   = state.makeup !== null ? item.mk[state.makeup] : '[выберите макияж]';
   const ot   = state.outfit !== null ? item.ot[state.outfit] : '[выберите одежду]';
   const pObj = state.pose   !== null ? allPoses[state.pose]  : null;
-  const po   = pObj ? (typeof pObj === 'object' ? pObj.t : pObj) : '[выберите позу]';
+  const poseTexts = state.poses.size > 0
+    ? [...state.poses].map(idx => { const o = allPoses[idx]; return typeof o === 'object' ? o.t : o; })
+    : (pObj ? [typeof pObj === 'object' ? pObj.t : pObj] : []);
+  const po   = poseTexts.length > 0 ? poseTexts.join(' / ') : '[выберите позу]';
   const hair = state.hair   !== null ? HAIR[state.hair].t   : null;
   const cam  = state.camera !== null ? CAM[state.camera].t  : null;
   const extraTexts = [...extras].sort().map(i => EXTRAS[i].t);
@@ -83643,7 +83674,7 @@ function updatePrompt() {
   const makeupOk = state.makeup !== null || cMakeup.length > 0;
   const outfitOk = state.outfit !== null || cOutfit.length > 0;
   const hairOk   = state.hair   !== null || cHair.length   > 0;
-  const poseOk   = state.pose   !== null || cPose.length   > 0;
+  const poseOk   = state.poses.size > 0 || state.pose !== null || cPose.length > 0;
   const cameraOk = state.camera !== null || cCamera.length > 0;
   const isReady  = locOk && makeupOk && outfitOk && hairOk && poseOk && cameraOk;
 
@@ -83702,6 +83733,7 @@ function copyPrompt() {
     outfit:   state.outfit,
     hair:     state.hair,
     pose:     state.pose,
+    poses:    [...state.poses],
     camera:   state.camera,
     hands:    state.hands,
     extras:   [...extras],
@@ -83825,6 +83857,7 @@ function reuseHistory(i) {
   state.outfit = h.outfit;
   state.hair   = h.hair;
   state.pose   = h.pose;
+  state.poses  = new Set(h.poses || (h.pose !== null ? [h.pose] : []));
   state.camera = h.camera;
   state.hands  = h.hands;
   extras.clear(); h.extras.forEach(e => extras.add(e));
@@ -83895,7 +83928,7 @@ function deleteHistory(i) {
 // ═══════════════════════════════════════════════════════════════════════════
 function resetAll() {
   state.loc = null; state.makeup = null; state.outfit = null;
-  state.hair = null; state.pose = null; state.camera = null; state.hands = null;
+  state.hair = null; state.pose = null; state.poses = new Set(); state.camera = null; state.hands = null;
   state.decollete = false;
   extras.clear();
   accItems.clear();
@@ -84292,6 +84325,7 @@ function applySmartResult(i) {
   state.outfit = r.otIdx;
   state.hair   = r.hairIdx;
   state.pose   = r.poIdx;
+  state.poses  = new Set(r.poIdx !== null ? [r.poIdx] : []);
   state.camera = r.camIdx;
   state.hands  = r.handsIdx;
 
@@ -84343,7 +84377,7 @@ function copySmartResult(i) {
   const entry = {
     locIdx: r.locIdx, loc: r.locName, text: r.prompt,
     makeup: r.mkIdx, outfit: r.otIdx, hair: r.hairIdx,
-    pose: r.poIdx, camera: r.camIdx, hands: r.handsIdx,
+    pose: r.poIdx, poses: r.poIdx !== null ? [r.poIdx] : [], camera: r.camIdx, hands: r.handsIdx,
     extras: [], accItems: r.accItems || [],
     custom: { loc:'', makeup:'', outfit:'', hair:'', pose:'', camera:'', acc:'', hands:'', extras:'' },
     time: new Date().toLocaleTimeString('ru-RU', {hour:'2-digit',minute:'2-digit'})
