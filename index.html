@@ -99,8 +99,10 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .pill{font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px;white-space:nowrap}
 .pill-s{background:var(--amber-bg);color:var(--amber)}
 .pill-m{background:var(--blue-bg);color:var(--blue)}
+.pill-f{background:#fce7f3;color:#db2777}
 .card.sel .pill-s{background:rgba(254,243,199,.25);color:#fcd34d}
 .card.sel .pill-m{background:rgba(227,240,251,.25);color:#93c5fd}
+.card.sel .pill-f{background:rgba(252,231,243,.25);color:#f472b6}
 .card-title{font-weight:600;font-size:12px;display:block;margin-bottom:2px}
 .card-desc{font-size:11px;opacity:.75;line-height:1.5;display:block;margin-top:3px}
 .empty-hint{font-size:11px;color:var(--muted);text-align:center;padding:18px;border:1px dashed var(--border);border-radius:7px}
@@ -518,6 +520,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
       <div class="legend">
         <span class="legend-item"><span class="pill pill-s">📱 SELFIE</span> selfie</span>
         <span class="legend-item"><span class="pill pill-m">🪞 ЗЕРКАЛО</span> mirror</span>
+        <span class="legend-item"><span class="pill pill-f">💋 ФЛИРТ</span> флирт</span>
       </div>
       <input class="search-inp" id="poseSearch" type="text" placeholder="🔍 Поиск позы..." oninput="renderPoseList()">
       <div class="choice-group" id="poseList"><div class="empty-hint">Сначала выберите локацию</div></div>
@@ -931,6 +934,18 @@ const SPECIAL_POSES = [
   {t:"ЗЕРКАЛО — mirror selfie, phone held at chest or mid-torso level, looking at the reflection with a natural relaxed expression and a soft smile. Phone is visible in the frame. Natural indoor lighting reflects authentically in the mirror. Background shows a real lived-in space.",s:"mirror"},
   {t:"ЗЕРКАЛО — bathroom mirror selfie, hands holding phone at mid-chest level, looking directly at the phone screen reflected. Bathroom details — tiles, light, maybe a plant or products — naturally visible behind. Morning or evening light. Completely genuine everyday moment.",s:"mirror"},
   {t:"ЗЕРКАЛО — large hallway or bedroom mirror shot, phone held at waist or hip level, subject looking at the reflection with a calm confident expression and natural smile. Mirror frame is partially visible at edges. Natural indoor ambient light. Composition captures both the subject and enough environment to feel grounded and real.",s:"mirror"},
+
+  // ── ФЛИРТ ───────────────────────────────────────────────────────────────
+  {t:"ФЛИРТ — she holds steady eye contact with the camera, chin slightly lowered, the faintest smile at the corner of her lips — the look of someone who knows exactly what effect she has and is choosing to let it happen. Everything else in her posture is relaxed, unhurried.",s:"flirt"},
+  {t:"ФЛИРТ — one shoulder lifted in a slow half-shrug, head tilted slightly toward it, eyes locked on the lens with a playful look that says 'maybe'. The movement is minimal; the energy is total.",s:"flirt"},
+  {t:"ФЛИРТ — her fingertip lightly touches her lip or rests near the corner of her mouth, not self-consciously but as a gesture caught mid-thought. Gaze directly into the camera, expression warm and slightly amused.",s:"flirt"},
+  {t:"ФЛИРТ — she leans forward very slightly toward the camera, elbows resting on a surface in front of her, chin propped on interlaced fingers or one palm. Eyes at lens level, lips just barely parted. An intimate, attentive posture — as if listening closely to something interesting.",s:"flirt"},
+  {t:"ФЛИРТ — she glances back over her shoulder at the camera with a half-turn, one eyebrow very slightly raised, the hint of a smile. The rest of her body faces away. The look is a deliberate invitation — come look, I know you are.",s:"flirt"},
+  {t:"ФЛИРТ — sitting with legs crossed and one hand resting lightly on her knee, the other lifting a glass or brushing her hair back. Looking at the camera with an expression of easy, unforced pleasure — the kind of flirtation that comes from genuinely enjoying the moment.",s:"flirt"},
+  {t:"ФЛИРТ — she tilts her head, a slow smile spreading as though the camera just said something she finds particularly clever. Eyes warm, expression open, a single dimple or the line of her collarbone catching the light. Nothing posed. Everything present.",s:"flirt"},
+  {t:"ФЛИРТ — her hand moves slowly through her hair — not fixing it, just touching — while her eyes stay fully on the lens. The gesture is unhurried and completely self-aware. A still moment charged with light energy.",s:"flirt"},
+  {t:"ФЛИРТ — she bites lightly on her lower lip, looking directly at the camera with a soft, direct gaze. The bite is barely there — a flicker, caught mid-thought. Her posture is relaxed, shoulders natural, the rest of her face calm.",s:"flirt"},
+  {t:"ФЛИРТ — leaning sideways against a wall or door frame, arms loosely crossed or one hand in a pocket, weight on one hip. Looking at the camera with the ease of someone who is entirely comfortable being watched and is quietly amused by it.",s:"flirt"},
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -81839,6 +81854,107 @@ LOC.push(...[
  bg:"Background: a fashion show backstage moments before the finale, a row of mirrors with bare bulbs, a rack of finished garments, shoes lined up and a curtain to the runway, no people."}
 ]);
 
+LOC.push(...[
+// ── ЛАКШЕРИ — новые ────────────────────────────────────────────────────────
+{n:"Частный остров — вилла",c:"лакшери",
+ mk:["Barely-there waterproof + tinted balm + highlight — island glow","Bronze waterproof + coral gloss + mascara — tropical luxe","Dewy waterproof + rose gloss — paradise fresh","Glass skin + barely-there — pure island","Warm glow waterproof + berry stain — sunset island"],
+ ot:["Белое льняное платье макси + босиком — island queen","Монохромный белый купальник + прозрачная накидка + босоножки — beach luxe","Шёлковый сарафан + босиком + золото — effortless island","Бикини + парео шёлковое + босоножки — resort paradise","Льняной сет белый + босиком + украшения — minimal island"],
+ po:["Стоит на деревянном пирсе, океан вокруг","Сидит на краю инфинити-пула над морем","Идёт по белому песку, вилла позади","Лежит в гамаке между пальмами","Смотрит на горизонт с крыльца виллы","Смотрит в камеру, океан bokeh"],
+ bg:"Background: a private island villa with overwater infinity pool, white sand beach directly below, dense palm canopy above and no other structures visible, no people."},
+
+{n:"Аукционный дом — Christie's/Sotheby's",c:"лакшери",
+ mk:["Matовый нюд + bold brow + highlight — auction authority","Red lip + clean skin + mascara — collector statement","Smoky taupe + nude stain + glow — evening preview","Glass skin + barely-there — minimal luxe","Berry stain + thin liner + glow — editorial"],
+ ot:["Структурное платье-футляр + каблуки + statement earrings — auction house","Широкие брюки + шёлковая блуза + блейзер + каблуки — power collector","Монохромный look + ankle boots + clutch — sleek evening","Кашемировый свитер + прямые брюки + лоферы + watch — private view","Бархатный блейзер + брюки + mule — reception evening"],
+ po:["Изучает лот в освещённой витрине","Держит каталог аукциона, смотрит в камеру","Стоит у оценочного стола — взгляд аналитика","Профиль у главного лота на пьедестале","Смотрит в сторону paddle — готова торговаться","Сидит в зале торгов, первый ряд"],
+ bg:"Background: a major auction house preview room, a single important work spotlit on a white plinth, the catalogue on the table, white gloves and hushed atmosphere, no people."},
+
+{n:"Вертолёт над ночным городом",c:"лакшери",
+ mk:["Smoky eye + nude gloss + highlight — aerial night glam","Bold liner + berry lip — city night editorial","Matовый тёмный + glow + mascara — night flight","Red lip + clean skin + mascara — downtown dramatic","Warm bronze + coral gloss — above the city"],
+ ot:["Чёрное вечернее платье + каблуки + тонкое колье — helicopter glam","Монохромный чёрный look + boots + watch — night aerial","Шёлковое платье миди + мюли + серьги — city flight","Кашемировый coat + прямые брюки + каблуки — city elevated","Пайетки + heels — over the lights"],
+ po:["Смотрит в иллюминатор вертолёта — огни города внизу","Профиль в окне — ночной skyline bokeh","Смотрит в камеру — город горит позади","Облокотилась на дверь вертолёта","Сидит в кожаном кресле, огни bokeh за стеклом","Смотрит вниз на огни мегаполиса"],
+ bg:"Background: a helicopter interior at night, the city grid of lights stretching to the horizon through the curved plexiglass window, no people."},
+
+{n:"Закрытый теннисный клуб",c:"лакшери",
+ mk:["Dewy waterproof + coral gloss — court fresh","Barely-there waterproof + balm + brow gel — sport minimal","Warm glow waterproof + rose stain — active glow","Bronze waterproof + highlight + mascara — match editorial","Glass skin + tinted balm — clean court"],
+ ot:["Белый теннисный сет luxe + кеды premium + хвост — court queen","Белая плиссированная юбка + fitted топ + кеды — preppy tennis","Льняной сет + white sneakers — clubhouse style","Белое платье теннисное + sneakers + visore — match ready","Минималистичный сет белый + золото + кеды — effortless court"],
+ po:["Держит ракетку, смотрит в камеру","Подбрасывает мяч перед подачей","Сидит у сетки на корте после игры","Идёт по клубной дорожке с ракеткой","Профиль у задней линии корта","Смотрит в камеру у белой скамейки клуба"],
+ bg:"Background: a private members tennis club, red clay or manicured grass court, white iron chairs at courtside and a pristine clubhouse beyond, no people."},
+
+{n:"Президентский люкс — утро",c:"лакшери",
+ mk:["Dewy + rose gloss + highlight — suite morning","Barely-there + balm + flushed — fresh morning","Glass skin + barely-there — pure","No-makeup + flushed — authentic morning","Nude gloss + mascara — effortless suite"],
+ ot:["Шёлковая пижама luxe + босиком — presidential morning","Белый махровый халат + тапочки + кофе — suite ritual","Атласная комбинация + босиком — delicate morning","Шёлковый комплект loungewear + босиком + украшения — quiet luxe","Льняной oversize рубашка + нижнее бельё — candid morning"],
+ po:["Стоит у панорамного окна с кофе — город внизу","Сидит на подоконнике, простыня вокруг плеч","Смотрит на роскошно застеленную кровать","Идёт к балкону с чашкой — ещё сонная","Смотрит в камеру у огромного зеркала","Профиль у окна — утренний свет на лице"],
+ bg:"Background: a presidential suite bedroom at dawn, bespoke bedding turned down, floor-to-ceiling city view, a silver breakfast tray by the window, no people."},
+
+// ── ЖИЗНЬ — новые ─────────────────────────────────────────────────────────
+{n:"Первый кофе в тишине — до будильника",c:"жизнь",
+ mk:["No-makeup + balm — honest morning","Barely-there + tinted balm — 5am natural","Dewy + flushed — fresh morning","Glass skin + balm — pure","Натуральный — effortless"],
+ ot:["Большой oversized свитер + хлопковые шорты — sleepy comfort","Шёлковая пижама — quiet morning","Кашемировый халат + босиком — warm start","Хлопковый сет — minimal morning","Вчерашняя рубашка мужского кроя + босиком — candid"],
+ po:["Стоит у окна с кружкой, город ещё спит","Сидит на полу с кружкой, спиной к дивану","Смотрит в чёрный экран телефона — осознаёт","Греет руки о кружку, глаза закрыты","Первые лучи на лице, стоит неподвижно","Смотрит в камеру — только проснулась"],
+ bg:"Background: a dark quiet kitchen at 5am, a single warm lamp on, steam rising from a mug on the counter, the city outside still black, no people."},
+
+{n:"Онлайн-шопинг дома",c:"жизнь",
+ mk:["No-makeup + balm — home natural","Barely-there + tinted balm — casual","Dewy + flushed — fresh","Натуральный + nude lip — clean","Лёгкий хайлайт — radiant"],
+ ot:["Кашемировый свитер + леггинсы + носки — cosy scroll","Oversized hoodie + шорты — casual browse","Шёлковая пижама — loungewear shop","Трикотажный сет + босиком — minimal","Белая рубашка oversize + джинсы — relaxed"],
+ po:["Сидит с ноутбуком на диване, ноги подтянуты","Держит телефон горизонтально — листает","Указывает пальцем на экран — нашла!","Смотрит в камеру с выражением 'куплю'","Рядом пакеты — уже пришло, смотрит","Прикладывает к себе вещь из посылки"],
+ bg:"Background: a cosy living room with a laptop open on the sofa, a few delivery boxes nearby and soft afternoon light, no people."},
+
+{n:"Вечер с подругами дома",c:"жизнь",
+ mk:["Натуральный + coral gloss — girls night in","Dewy + berry stain + mascara — casual glam","Warm glow + nude gloss — social glow","Barely-there + balm — effortless","Rose wash + mascara — fresh fun"],
+ ot:["Шёлковая пижама + босиком — sleepover luxe","Oversized свитер + шорты + носки — cosy girls night","Домашний сет + тапочки — relaxed evening","Хлопковое платье + босиком — casual home","Широкая рубашка + леггинсы — comfortable"],
+ po:["Сидит среди подушек с бокалом","Смеётся, запрокинув голову","Показывает что-то в телефоне","Обнимает подушку, слушает подругу","Наливает вино, смотрит в камеру","Делает селфи одна — подруги рядом bokeh"],
+ bg:"Background: a lived-in living room set for an evening in — snacks on the coffee table, candles lit, throw blankets, a movie paused on screen, no people."},
+
+{n:"Спонтанная покупка — магазин",c:"жизнь",
+ mk:["Натуральный + balm — shopping natural","Dewy + coral gloss — fresh out","Warm glow + nude — casual chic","Barely-there + mascara — quick errand","Rose wash + highlight — daytime"],
+ ot:["Тренч + джинсы + лоферы — errands chic","Широкие брюки + водолазка + лоферы — relaxed shop","Платье миди + кардиган + балетки — feminine day","Джинсы + базовый топ + sneakers — casual","Шёлковая блуза + прямые брюки + мюли — effortless"],
+ po:["Держит вещь в руках — решает брать","Смотрит в зеркало примерочной","Несёт несколько пакетов, смотрит в камеру","Качает головой 'нет' у вешалки — смешно","Держит карточку у кассы, улыбается","Выходит из магазина с пакетами"],
+ bg:"Background: a bright minimalist boutique, clean white rails, good lighting and a fitting room mirror in the background, no people."},
+
+{n:"Рабочий day off — ничего не делать",c:"жизнь",
+ mk:["No-makeup + balm — true day off","Barely-there + balm — nothing day","Dewy + flushed — rested glow","Натуральный тон — minimal","Glass skin — pure rest"],
+ ot:["Самый мягкий свитер + широкие штаны + босиком — ultimate comfort","Пижама весь день — allowed","Oversized hoodie + леггинсы — couch day","Трикотажный сет + тапочки — lazy luxe","Большой кардиган + нижнее бельё — candid day"],
+ po:["Лежит на диване, смотрит в потолок","Сидит у окна, дождь идёт — думает","Валяется в постели в 3pm — без вины","Смотрит в пустую чашку — ещё кофе?","Смотрит в камеру из-под одеяла","Растянулась на полу — полное расслабление"],
+ bg:"Background: a quiet apartment on a grey afternoon, the sofa unmade and a blanket on the floor, a cold cup of tea, no agenda visible, no people."},
+
+// ── ИНТЕРЬЕР — новые ──────────────────────────────────────────────────────
+{n:"Читальный зал с арочными окнами",c:"интерьер",
+ mk:["Matовый тон + soft brow — library","Натуральный + nude lip — clean","Warm glow + balm — afternoon","Barely-there + mascara — natural","Dewy + rose gloss — soft"],
+ ot:["Твидовый блейзер + прямые брюки + лоферы — reading room","Кашемировый свитер + брюки + балетки — cosy academia","Платье миди + кардиган + лоферы — feminine library","Шёлковая блуза + слаксы + лоферы — refined afternoon","Широкая рубашка + джинсы + балетки — relaxed read"],
+ po:["Стоит у арочного окна, книга в руках","Сидит за дубовым столом под лампой","Смотрит вверх от книги — поймали за чтением","Профиль у окна — свет на странице","Идёт между рядами столов","Смотрит в камеру из-за раскрытой книги"],
+ bg:"Background: a grand reading room with arched windows, long oak tables with individual lamps, a vaulted ceiling and afternoon light cutting across the dust-moted air, no people."},
+
+{n:"Мастерская художника",c:"интерьер",
+ mk:["No-makeup + balm — studio natural","Dewy + flushed — creative fresh","Barely-there + tinted balm — artisan","Warm glow + coral — studio radiant","Натуральный — effortless artist"],
+ ot:["Льняной комбинезон + босиком — studio essential","Oversized рубашка в краске + джинсы — artist authentic","Широкие брюки + базовый топ — minimal studio","Платье свободное + фартук сверху — creative","Трикотажный сет + босоножки — relaxed artist"],
+ po:["Стоит перед большим холстом, кисть в руках","Смотрит на незаконченную работу издалека","Нюхает краску, профиль у палитры","Сидит на табурете, ноги скрещены — оценивает","Мажет кистью, не смотрит в камеру","Смотрит в камеру — руки в краске"],
+ bg:"Background: a painter's studio with a large canvas on the easel, tubes of paint and brushes on a battered table, north skylight and the smell of linseed oil implied, no people."},
+
+{n:"Ресторанная кухня — час до открытия",c:"интерьер",
+ mk:["Clean skin + balm — pre-service","Barely-there + brow gel — kitchen minimal","Dewy + tinted balm — fresh","Натуральный + mascara — pre-shift","Warm glow + coral — morning kitchen"],
+ ot:["Белый поварской китель + чёрные брюки + клоги — chef proper","Льняной фартук + базовая рубашка + брюки — prep aesthetic","Чёрный фартук + шёлковая блуза — restaurant editorial","Белая рубашка + слаксы + apron — bistro chic","Neutral монохром + kitchen apron — minimal chef"],
+ po:["Пробует соус с ложки, глаза закрыты","Нарезает зелень, профиль","Смотрит в камеру, нож в руках","Раскатывает тесто, мука на руках","Стоит над плитой, пар поднимается","Смотрит на mise en place перед сервисом"],
+ bg:"Background: a professional restaurant kitchen an hour before service, mise en place laid out, the brigade's stations clean and ready, steam from a stockpot, no people."},
+
+{n:"Зимний сад в снегопад",c:"интерьер",
+ mk:["Dewy + rose gloss — winter glow","Натуральный + balm — garden natural","Warm glow + coral — warm inside","Barely-there + tinted balm — soft","Лёгкий хайлайт + nude — radiant"],
+ ot:["Кашемировый свитер + широкие брюки — winter cosy","Шёлковая блуза + юбка миди + boots — feminine winter","Knit-платье + лоферы — warm","Тёплый кардиган + трикотажные брюки + носки — cosy garden","Шерстяное платье + тапочки — winter indoor"],
+ po:["Стоит среди тропических растений — снег за стеклом","Смотрит как падает снег через купол","Держит кружку кофе у пальмы — уют","Профиль — снежинки на стекле позади","Читает в кресле среди зелени","Смотрит в камеру — зима/лето в одном"],
+ bg:"Background: a glass conservatory full of tropical plants while heavy snow falls outside, the paradox of warmth and winter in the same frame, no people."},
+
+{n:"Фотостудия — пустая",c:"интерьер",
+ mk:["Matовый нюд + bold brow + highlight — studio editorial","Graphic liner + nude lip — fashion shoot","Red lip + clean skin — studio classic","Smoky + nude gloss — beauty shot","Glass skin + barely-there — skin study"],
+ ot:["Минималистичное белое платье — studio clean","Чёрный монохром + boots — editorial","Структурный костюм + топ — fashion","Базовое бельё + oversized blazer — beauty editorial","Широкие брюки + шёлковый топ + bare foot — relaxed studio"],
+ po:["Стоит у белого бесшовного фона","Сидит на полу студии, ноги скрещены","Профиль у стойки с отражателем","Смотрит в камеру у прожектора","Откидывается на студийный стул","Стоит у огромного окна — контровой свет"],
+ bg:"Background: a photography studio between shoots, white seamless paper backdrop rolled up, studio strobes on stands, a stool and a reflector leaning against the wall, no people."},
+
+{n:"Таунхаус — лестница с балюстрадой",c:"интерьер",
+ mk:["Warm glow + coral gloss + mascara — townhouse editorial","Matовый нюд + bold brow — refined","Red lip + clean skin — classic","Dewy + rose gloss + highlight — luminous","Smoky taupe + nude stain — elegant"],
+ ot:["Шёлковое платье миди + каблуки + серьги — townhouse chic","Широкие брюки + шёлковая блуза + лоферы — refined home","Монохромный кремовый look + мюли — minimal","Платье с поясом + каблуки — feminine editorial","Кашемировый свитер + прямые брюки + каблуки — relaxed luxe"],
+ po:["Стоит на лестнице, рука на перилах — смотрит вниз","Спускается по лестнице, оглянулась","Сидит на ступени, ноги вперёд","Профиль у балюстрады — свет сверху","Смотрит вверх по лестнице с нижнего пролёта","Смотрит в камеру с середины лестницы"],
+ bg:"Background: a Georgian townhouse staircase, white painted balusters, dark handrail, natural light from a skylight above and stair runner underfoot, no people."}
+]);
+
 ;;;;;
 // ═══════════════════════════════════════════════════════════════════════════
 // CAMERA SPACE DESCRIPTIONS — intimate background fragments by category
@@ -82323,7 +82439,8 @@ function renderPoseList() {
     d.className = 'card' + (state.pose === i ? ' sel' : '');
     const numLabel = i < regCount ? `Вариант ${i+1}` : '';
     const pill = kind === 'selfie' ? '<span class="pill pill-s">📱 SELFIE</span>'
-                : kind === 'mirror' ? '<span class="pill pill-m">🪞 ЗЕРКАЛО</span>' : '';
+                : kind === 'mirror' ? '<span class="pill pill-m">🪞 ЗЕРКАЛО</span>'
+                : kind === 'flirt'  ? '<span class="pill pill-f">💋 ФЛИРТ</span>' : '';
     d.innerHTML = `<div class="card-num">${numLabel}${pill}</div>${text}`;
     d.addEventListener('click', () => {
       state.pose = i;
