@@ -86928,7 +86928,7 @@ const MAKEUP_GUIDE = [
 
 ];
 function toggleMakeupGuideWindow(){const w=document.getElementById('makeupGuideWindow');const btn=document.getElementById('makeupGuideToggleBtn');if(!w)return;const isOpen=w.classList.toggle('open');if(btn)btn.textContent=isOpen?'✕ Закрыть':'💄 Типы макияжа';if(isOpen&&!w._rendered){renderMakeupGuideList(MAKEUP_GUIDE);w._rendered=true;}}
-function renderMakeupGuideList(data){const c=document.getElementById('makeupGuideList');if(!c)return;const g={};data.forEach((s,i)=>{if(!g[s.cat])g[s.cat]=[];g[s.cat].push({...s,_idx:i});});
+function renderMakeupGuideList(data){const c=document.getElementById('makeupGuideList');if(!c)return;const g={};data.forEach((s,i)=>{if(!g[s.cat])g[s.cat]=[];g[s.cat].push({...s,_idx:i});});c.innerHTML=Object.keys(g).map(cat=>`<div style="margin-bottom:4px;"><div style="font-size:11px;font-weight:700;color:#2a1a2e;padding:6px 8px 2px;border-bottom:1px solid #e0d8e8;">${cat}</div>${g[cat].map(s=>`<div class="style-card"><div class="style-card-hdr" style="background:#2a1a2e;cursor:pointer" onclick="copyMakeupGuide(${s._idx})"><span class="style-card-name">${s.name}</span><button class="style-card-copy" onclick="event.stopPropagation();copyMakeupGuide(${s._idx})">📋</button></div><div class="style-card-body">${s.desc}<div class="style-card-tags">${(s.tags||[]).map(t=>`<span class="style-tag">${t}</span>`).join('')}</div></div></div>`).join('')}</div>`).join('');}
 LOC.push(...[{
   n:"Частный клуб / private members club",c:"жизнь",
    mk:["Матовый berry lip, тонкая стрелка — members club",
@@ -88578,7 +88578,8 @@ LOC.push(...[{
    "Боулдерс, пингвины — penguin beach",
    "На мысе Доброй Надежды — Cape of Good Hope",
    "Виноградник Стелленбош — Stellenbosch vineyard"]
-}]);c.innerHTML=Object.keys(g).map(cat=>`<div style="margin-bottom:4px;"><div style="font-size:11px;font-weight:700;color:#2a1a2e;padding:6px 8px 2px;border-bottom:1px solid #e0d8e8;">${cat}</div>${g[cat].map(s=>`<div class="style-card"><div class="style-card-hdr" style="background:#2a1a2e;cursor:pointer" onclick="copyMakeupGuide(${s._idx})"><span class="style-card-name">${s.name}</span><button class="style-card-copy" onclick="event.stopPropagation();copyMakeupGuide(${s._idx})">📋</button></div><div class="style-card-body">${s.desc}<div class="style-card-tags">${(s.tags||[]).map(t=>`<span class="style-tag">${t}</span>`).join('')}</div></div></div>`).join('')}</div>`).join('');}
+}]);
+
 function filterMakeupGuide(){const q=(document.getElementById('makeupGuideSearch').value||'').toLowerCase().trim();const data=q?MAKEUP_GUIDE.filter(s=>s.name.toLowerCase().includes(q)||s.desc.toLowerCase().includes(q)||s.cat.toLowerCase().includes(q)||(s.tags||[]).some(t=>t.includes(q))):MAKEUP_GUIDE;const w=document.getElementById('makeupGuideWindow');if(w)w._rendered=false;renderMakeupGuideList(data);}
 function copyMakeupGuide(idx){const s=MAKEUP_GUIDE[idx];if(!s)return;const toast=()=>{const t=document.getElementById('styleToast');if(!t)return;t.textContent='✓ '+s.name;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);};if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(s.desc).then(toast);}else{const ta=document.createElement('textarea');ta.value=s.desc;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast();}}
 
