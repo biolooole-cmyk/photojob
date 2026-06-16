@@ -86929,7 +86929,7 @@ const MAKEUP_GUIDE = [
 ];
 function toggleMakeupGuideWindow(){const w=document.getElementById('makeupGuideWindow');const btn=document.getElementById('makeupGuideToggleBtn');if(!w)return;const isOpen=w.classList.toggle('open');if(btn)btn.textContent=isOpen?'✕ Закрыть':'💄 Типы макияжа';if(isOpen&&!w._rendered){renderMakeupGuideList(MAKEUP_GUIDE);w._rendered=true;}}
 function renderMakeupGuideList(data){const c=document.getElementById('makeupGuideList');if(!c)return;const g={};data.forEach((s,i)=>{if(!g[s.cat])g[s.cat]=[];g[s.cat].push({...s,_idx:i});});
-LOC.push([{
+LOC.push(...[{
   n:"Частный клуб / private members club",c:"жизнь",
    mk:["Матовый berry lip, тонкая стрелка — members club",
    "Smoky taupe + nude gloss — private club chic",
@@ -86962,7 +86962,7 @@ LOC.push([{
    "Сидит нога на ногу, прямая спина — composed club seated",
    "Стоит у книжной полки — library club standing"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Аукцион / auction house preview",c:"жизнь",
    mk:["Nude stain, thin liner — auction house refined",
    "Матовый bordeaux + bold brow — art collector look",
@@ -86995,7 +86995,7 @@ LOC.push([{
    "В профиль у большого полотна — painting contrast pose",
    "Смотрит в камеру на фоне работы — collector portrait"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Яхт-клуб / yacht club",c:"жизнь",
    mk:["Sunkissed bronzer + coral gloss — nautical summer glow",
    "Navy liner + nude stain — sailor chic editorial",
@@ -87028,7 +87028,7 @@ LOC.push([{
    "У штурвала, уверенная — captain pose",
    "На причале, отражение в воде — marina reflection"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Частная дегустация виски / whisky tasting",c:"жизнь",
    mk:["Тёмные тёплые тени + nude rose — whisky evening warmth",
    "Матовый nude-berry + bold brow — tasting sophistication",
@@ -87061,7 +87061,7 @@ LOC.push([{
    "Сидит у камина с бокалом — fireside whisky",
    "Разговаривает у барреля — distillery conversation"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Чартерный рейс / private jet cabin",c:"жизнь",
    mk:["Nude gloss + highlight + waterproof mascara — in-flight chic",
    "Матовый nude + bold brow — jet-set minimal",
@@ -87094,7 +87094,7 @@ LOC.push([{
    "Смотрит в иллюминатор, задумчивая — cloud gazing",
    "Стоит у прохода, элегантная — cabin standing"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Polo match / конный поло",c:"жизнь",
    mk:["Sunkissed + coral nude + waterproof — polo field sun",
    "Warm glow + straw hat aesthetic — country club",
@@ -87127,7 +87127,7 @@ LOC.push([{
    "На трибуне, шляпа — grandstand elegant",
    "Тост шампанским — polo celebration"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Гала-ужин благотворительности / charity gala dinner",c:"жизнь",
    mk:["Full evening glam — charity gala ready",
    "Смоки eye + nude gloss — gala sophistication",
@@ -87160,7 +87160,7 @@ LOC.push([{
    "Разговаривает с гостями — gala networking",
    "У входа, ждёт — arrivals red carpet moment"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Ателье haute couture / couture fitting",c:"жизнь",
    mk:["Nude precision + strong brow — couture fitting blank canvas",
    "Berry stain + mascara только — atelier minimal",
@@ -87193,7 +87193,7 @@ LOC.push([{
    "Поворачивается боком — profile turn fitting",
    "Держит ткань, рассматривает — fabric selection"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Загородный дом / country estate",c:"жизнь",
    mk:["Country glow: bronzer + coral + mascara — estate weekend",
    "Warm nude + highlight + brow gel — country house",
@@ -87226,7 +87226,7 @@ LOC.push([{
    "В розовом саду — walled garden portrait",
    "Верховая прогулка — estate equestrian"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Концерт классической музыки / classical concert",c:"жизнь",
    mk:["Elegant evening: dark eye + nude gloss — concert hall",
    "Matov red lip + clean face — classical evening",
@@ -87259,7 +87259,7 @@ LOC.push([{
    "В фойе филармонии, у колонны — foyer portrait",
    "Шампанское в антракте — intermission champagne"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Частный арт-клуб / private art club",c:"интерьер",
    mk:["Warm editorial: copper eye + nude lip — private art club",
    "Тёмный smoky + highlight + gloss — art club evening",
@@ -87292,7 +87292,7 @@ LOC.push([{
    "С бокалом у полотна — vernissage pose",
    "Сидит на дизайнерском кресле — collector at rest"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Лофт-студия дизайнера / designer loft studio",c:"интерьер",
    mk:["No-makeup editorial: BB + mascara — studio authentic",
    "Warm tones + nude gloss — designer studio glow",
@@ -87325,7 +87325,7 @@ LOC.push([{
    "У больших окон — loft light portrait",
    "С рулоном ткани — material selection"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Showroom люксового бренда / luxury brand showroom",c:"интерьер",
    mk:["Sophisticated neutral: nude + glow skin — luxury showroom",
    "Full glam press day look — brand event ready",
@@ -87358,7 +87358,7 @@ LOC.push([{
    "Примеряет аксессуар — trying on moment",
    "На фоне brand logo wall — brand portrait"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Пентхаус гостиная / penthouse living room",c:"интерьер",
    mk:["Glam с панорамным видом: full face glow — penthouse editorial",
    "City lights evening glam — urban penthouse",
@@ -87391,7 +87391,7 @@ LOC.push([{
    "На балконе пентхауса — penthouse terrace",
    "Силуэт на закате, панорама — sunset silhouette"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Библиотека особняка / manor library",c:"интерьер",
    mk:["Oxford academic: nude + thin liner + groomed brow — library",
    "Rich tones: warm berry + bronzed — manor evening",
@@ -87424,7 +87424,7 @@ LOC.push([{
    "Смотрит в окно особняка, книга в руке — manor contemplative",
    "Сидит в leather кресле у камина — fireside library"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Номер Presidential suite",c:"интерьер",
    mk:["Full luxury glam — suite ready",
    "Morning in the suite: dewy skin + nude — suite morning",
@@ -87457,7 +87457,7 @@ LOC.push([{
    "На диване люкс-номера — suite lounge",
    "Смотрит в зеркало гардероба — suite mirror"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Концертный зал после выступления / concert hall backstage",c:"интерьер",
    mk:["Full performance glam — post-concert",
    "Stage makeup: bold + dramatic — performance face",
@@ -87490,7 +87490,7 @@ LOC.push([{
    "Смотрит в камеру у музыкального инструмента — backstage instrument",
    "В кулисах — wings of the stage"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Виллa с бассейном / villa pool terrace",c:"интерьер",
    mk:["Sun-kissed waterproof glam — poolside luxury",
    "Bronzed glow + coral — villa afternoon",
@@ -87523,7 +87523,7 @@ LOC.push([{
    "Сидит у воды, ноги в бассейне — poolside dip",
    "На фоне виллы и бассейна — villa portrait"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Фотостудия / professional photo studio",c:"интерьер",
    mk:["Studio test: clean skin + mascara — studio natural",
    "Blank canvas: nude + groomed brow — fotostudio ready",
@@ -87556,7 +87556,7 @@ LOC.push([{
    "В профиль, идеальный свет — studio profile",
    "В движении, dynamic — studio walking shot"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Ювелирный салон / high jewellery salon",c:"интерьер",
    mk:["Pristine nude + highlight — jewellery salon blank canvas",
    "Elegant minimal + berry gloss — salon sophisticated",
@@ -87589,7 +87589,7 @@ LOC.push([{
    "За стеклянной витриной — through the glass",
    "Портрет с украшением, прямой взгляд — jewellery portrait"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Терраса отеля на крыше / hotel rooftop",c:"отель",
    mk:["Sunset glow: golden shadow + coral gloss — rooftop golden",
    "Evening glam: smoky + nude — rooftop evening",
@@ -87622,7 +87622,7 @@ LOC.push([{
    "Силуэт на закате — rooftop sunset silhouette",
    "В шезлонге, панорама — rooftop lounging"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Спа отеля / hotel spa",c:"отель",
    mk:["No makeup spa glow — spa authentic",
    "Dewy clean skin + tinted balm — spa natural",
@@ -87655,7 +87655,7 @@ LOC.push([{
    "В паровой комнате — steam room atmospheric",
    "После процедуры, towel tuck — post-treatment"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Бар отеля / hotel bar",c:"отель",
    mk:["Evening at the bar: smoky + nude gloss — hotel bar evening",
    "Cocktail glam: red lip + highlight — bar classic",
@@ -87688,7 +87688,7 @@ LOC.push([{
    "Смотрит прямо в камеру — bar direct gaze",
    "Разговаривает с барменом — bar interaction"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Номер-люкс / luxury suite",c:"отель",
    mk:["Waking up glam: dewy + nude — suite morning iconic",
    "Evening luxury: smoky + champagne — suite evening",
@@ -87721,7 +87721,7 @@ LOC.push([{
    "На балконе suite — suite terrace",
    "На диване с шампанским — suite champagne"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Конференц-зал отеля / hotel conference room",c:"отель",
    mk:["Business polish: nude + liner + groomed — conference professional",
    "Power meeting: matte lip + highlight — conference bold",
@@ -87754,7 +87754,7 @@ LOC.push([{
    "Читает материалы — conference studying",
    "Смотрит в камеру у окна — conference portrait"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Отельный сад / hotel garden",c:"отель",
    mk:["Garden party: floral tones + coral — garden party",
    "Alfresco glow: bronzer + tinted balm — outdoor dining",
@@ -87787,7 +87787,7 @@ LOC.push([{
    "Идёт по дорожке сада — garden walking",
    "Завтрак на свежем воздухе — garden breakfast"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Бассейн отеля / hotel pool",c:"отель",
    mk:["Pool glam: waterproof + bronzed — hotel pool",
    "Sun-kissed: bronzer + coral waterproof — pool afternoon",
@@ -87820,7 +87820,7 @@ LOC.push([{
    "Прыжок в воду — pool jump dynamic",
    "Плывёт, вид сбоку — pool swimming editorial"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Ресторан отеля со звёздами / Michelin hotel restaurant",c:"отель",
    mk:["Michelin evening glam: refined full face — fine dining",
    "Restaurant chic: dark eye + nude gloss — dinner elegant",
@@ -87853,7 +87853,7 @@ LOC.push([{
    "У окна ресторана с видом — restaurant window",
    "Dessert moment — restaurant dessert"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Вестибюль дизайн-отеля / boutique hotel lobby",c:"отель",
    mk:["Boutique hotel editorial: graphic liner — design hotel",
    "Art hotel look: bold eye + nude — lobby editorial",
@@ -87886,7 +87886,7 @@ LOC.push([{
    "На дизайнерском диване лобби — lobby seating",
    "У большого арт-фото на стене — lobby art portrait"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Балкон с видом на море / ocean view balcony",c:"отель",
    mk:["Sea breeze glam: waterproof + coral — ocean balcony",
    "Sunrise beauty: dewy + peach — balcony morning",
@@ -87919,7 +87919,7 @@ LOC.push([{
    "Силуэт на закате — ocean sunset silhouette",
    "Сидит на полу балкона — balcony floor sitting"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Токийский небоскрёб / Tokyo skyscraper",c:"город",
    mk:["J-beauty: glass skin + tinted balm + bold brow — Tokyo",
    "Harajuku editorial: graphic liner — Tokyo street",
@@ -87952,7 +87952,7 @@ LOC.push([{
    "У горы Фудзи — Fuji distant portrait",
    "В традиционном саду — Japanese garden"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Нью-Йорк / New York skyline",c:"город",
    mk:["Manhattan power: bold lip + strong contour — NY power",
    "Brooklyn minimal: nude + mascara — NY downtown",
@@ -87985,7 +87985,7 @@ LOC.push([{
    "На Уолл-Стрит — financial district",
    "Такси жёлтое, мокрая улица — NYC rain"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Дубай / Dubai skyline",c:"город",
    mk:["Dubai glam: full face + highlight + dramatic eye — luxury",
    "Desert glow: bronzed + golden highlight — Dubai golden",
@@ -88018,7 +88018,7 @@ LOC.push([{
    "В торговом центре у фонтана — Dubai fountain",
    "В пустыне, дюны — desert portrait"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Париж / Paris streets",c:"город",
    mk:["French girl: red lip + mascara + no other makeup — Parisian",
    "Effortless: tinted balm + mascara — Montmartre natural",
@@ -88051,7 +88051,7 @@ LOC.push([{
    "У Лувра — musée portrait",
    "На rue des Martyrs — Montmartre street"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Лондон / London streets",c:"город",
    mk:["London editorial: bold brow + nude + liner — British chic",
    "Soho eclectic: colour lip + minimal — London creative",
@@ -88084,7 +88084,7 @@ LOC.push([{
    "Brick Lane граффити — London street art",
    "В красном автобусе — double decker"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Сингапур / Singapore Gardens by the Bay",c:"город",
    mk:["Singapore glam: dewy + tropical glow — humidity-proof",
    "Asian editorial: precise liner + nude — Singapore chic",
@@ -88117,7 +88117,7 @@ LOC.push([{
    "Тропический лес внутри купола — Garden Dome",
    "На набережной с видом на Марину — Marina Bay"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Монако / Monaco harbour",c:"город",
    mk:["Monaco glam: full glam + champagne highlight — Monte Carlo",
    "Yacht club chic: bronzed + coral — Monaco harbour",
@@ -88150,7 +88150,7 @@ LOC.push([{
    "Вид на горы и море — Riviera panorama",
    "На Grand Prix трассе — circuit portrait"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Дворцовая площадь / palace square",c:"город",
    mk:["Regal editorial: structured glam + bordeaux — palace",
    "Stately: nude precision + strong brow — institutional",
@@ -88183,7 +88183,7 @@ LOC.push([{
    "В дворцовом парке — palace gardens",
    "На площади перед дворцом — palace square exterior"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Мидtown финансовый квартал / financial district",c:"город",
    mk:["Finance power: structured matte + nude — Wall Street",
    "Corporate glam: defined eye + MLBB — financial district",
@@ -88216,7 +88216,7 @@ LOC.push([{
    "У входа в биржу — stock exchange exterior",
    "На эскалаторе бизнес-центра — corporate escalator"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Венеция / Venice canals",c:"город",
    mk:["Venice romantic: warm tones + rose gloss — canale",
    "Murano editorial: colour glass inspired makeup — Venice art",
@@ -88249,7 +88249,7 @@ LOC.push([{
    "На пьяцца Сан-Марко — St Mark's Square",
    "В окне палаццо — palazzo window"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Сафари-лодж / safari lodge",c:"путешествие",
    mk:["Safari glow: bronzed + warm highlight — bush camp",
    "Sundowner makeup: golden + coral — safari evening",
@@ -88282,7 +88282,7 @@ LOC.push([{
    "Со слонами вдали — elephant background",
    "На закате на верандe лоджа — lodge sunset"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Мальдивы / Maldives overwater bungalow",c:"путешествие",
    mk:["Maldives glow: waterproof bronzed + coral — lagoon beauty",
    "Ocean dewy: hydrating + tinted SPF + gloss — beach natural",
@@ -88315,7 +88315,7 @@ LOC.push([{
    "Закат, силуэт у воды — Maldivian sunset",
    "Завтрак на воде — overwater breakfast"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Дорога 66 / Route 66 desert road",c:"путешествие",
    mk:["Desert road: bronzed + coral tint + cat-eye — Route 66",
    "Road trip: natural + tinted balm + mascara — highway minimal",
@@ -88348,7 +88348,7 @@ LOC.push([{
    "У ретро-заправки — vintage gas station",
    "Закат в пустыне — desert sunset wide"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Горная вершина / mountain summit",c:"путешествие",
    mk:["Mountain glow: minimal + wind-proof — summit natural",
    "Alpine: waterproof tinted + coral — mountain fresh",
@@ -88381,7 +88381,7 @@ LOC.push([{
    "В лыжных очках — ski goggles editorial",
    "Хижина в горах — alpine hut"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Железнодорожный маршрут / luxury train journey",c:"путешествие",
    mk:["Train chic: refined nude + liner — Orient Express style",
    "Railway editorial: dark eye + nude gloss — luxury train",
@@ -88414,7 +88414,7 @@ LOC.push([{
    "В купе, книга в руках — compartment reading",
    "Мелькающий пейзаж через стекло — motion blur window"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Бали / Bali rice terraces",c:"путешествие",
    mk:["Bali glow: bronzed tropical + coral gloss — rice terrace",
    "Temple beauty: warm tones + tinted balm — pura",
@@ -88447,7 +88447,7 @@ LOC.push([{
    "На качелях над каньоном — jungle swing",
    "Цветы-подношения в руках — Bali ceremony"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Патагония / Patagonia landscapes",c:"путешествие",
    mk:["Patagonia glow: windproof + natural + tinted — epic landscape",
    "Adventure beauty: waterproof + tinted balm — trekking",
@@ -88480,7 +88480,7 @@ LOC.push([{
    "На треккинговой тропе — trail portrait",
    "Закат над озером Торрес — lake sunset"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Марокко / Morocco medina",c:"путешествие",
    mk:["Moroccan beauty: kohl eyes + warm lips + glow — medina",
    "Marrakech editorial: dark eye + terracotta — souk",
@@ -88513,7 +88513,7 @@ LOC.push([{
    "В красильнях Феса — tannery lookout",
    "Дюны Сахары, верхом на верблюде — desert camel"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Антарктика / Antarctic expedition",c:"путешествие",
    mk:["Expedition minimal: SPF + wind protection + mascara — polar",
    "Cold weather: waterproof + tinted balm — Antarctic",
@@ -88546,7 +88546,7 @@ LOC.push([{
    "На льду под северным сиянием — aurora ice",
    "У врат Антарктики — Antarctic landscape"]
 }]);
-LOC.push([{
+LOC.push(...[{
   n:"Кейптаун / Cape Town Table Mountain",c:"путешествие",
    mk:["Cape glow: sun-kissed + coral + waterproof — Cape Town",
    "South African editorial: warm tones + nude — V&A Waterfront",
