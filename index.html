@@ -85359,6 +85359,195 @@ const extras = new Set();
 const accItems = new Set();
 let activeCat = 'all';
 
+LOC.push(...[
+// ── ПОРТРЕТ — контекст и нарратив ────────────────────────────────────────
+{n:"Письмо без ответа — стол у окна",c:"портрет",
+ mk:["Pale dewy + balm — unread letter editorial","Barely-there + balm — window letter portrait","Natural + balm — writing portrait","Glass skin + balm — letter morning","Dewy + nude — desk portrait"],
+ ot:["Шёлковая рубашка + брюки + босиком — desk morning","Мягкий свитер + джинсы + носки — writing casual","Оверсайз рубашка мужская + босиком — intimate morning","Льняное платье + босиком — window portrait","Кашемировый халат + босиком — letter editorial"],
+ po:["Держит конверт — не распечатан","Пишет — ручка на бумаге","Смотрит в окно — письмо на столе","Профиль — свет падает на руку с ручкой","Смотрит в камеру — стол позади","Комкает лист — начинает снова"],
+ bg:"Background: a writing desk by a rain-streaked window, an old lamp, stacked letters, a fountain pen resting on a half-written page, the street outside soft and blurred, no people."},
+
+{n:"Финальные сборы — чемодан на полу",c:"портрет",
+ mk:["Barely-there + balm — packing editorial","Natural + balm — leaving portrait","Dewy + flushed — suitcase morning","Glass skin + balm — departure portrait","Warm glow + balm — travel prep"],
+ ot:["Пижама + босиком — последнее утро дома","Оверсайз свитер + джинсы + кеды — casual packing","Деловой костюм + чемодан рядом — business departure","Льняной co-ord + кеды — travel chic","Шёлковое платье + босоножки — glamorous departure"],
+ po:["Сидит на краю открытого чемодана","Складывает вещи — задумалась","Смотрит на пустую комнату — уезжает","Профиль — чемодан у двери","Смотрит в камеру — ключи в руке","Достаёт последнее — выбирает"],
+ bg:"Background: a bedroom at the moment of departure, an open suitcase on the floor half-packed, bare surfaces where pictures used to hang, a set of keys on the windowsill, morning light, no people."},
+
+{n:"Разговор по старому телефону — тянется шнур",c:"портрет",
+ mk:["Bold red lip + liner — telephone editorial","Warm glow + coral — call portrait","Barely-there + balm — phone call","Natural + balm — vintage call portrait","Dewy + gloss — telephone chic"],
+ ot:["Платье-рубашка + босиком — at-home call","Ретро юбка + блузка + каблуки — vintage call editorial","Шёлковый халат + босиком — evening call","Оверсайз свитер + джинсы + кеды — casual call","Пижама + босиком — late night call"],
+ po:["Говорит — улыбается — хорошие новости","Слушает — лицо серьёзное","Профиль — шнур тянется через комнату","Зажала трубку плечом — записывает","Смотрит в камеру — в разговоре","Кладёт трубку — конец"],
+ bg:"Background: a home interior with a vintage rotary dial telephone, a long curling cord, a small telephone table and chair, the cord stretched across the room, afternoon domestic light, no people."},
+
+{n:"Ожидание результата — тест на столе",c:"портрет",
+ mk:["Barely-there + balm — waiting portrait","Natural + balm — suspense portrait","Pale dewy — result wait","Glass skin + balm — moment editorial","Dewy + nude — anticipation portrait"],
+ ot:["Пижама + босиком — authentic morning wait","Мягкий co-ord + босиком — home moment","Джинсы + топ + босиком — casual wait","Оверсайз рубашка + леггинсы + босиком — honest portrait","Хлопковое платье + босиком — domestic moment"],
+ po:["Сидит — смотрит на часы","Закрыла глаза — ждёт","Смотрит в окно — руки сложены","Профиль — тест на краю стола","Смотрит в камеру — тревожно","Выдохнула — наконец"],
+ bg:"Background: a home bathroom counter, a medical test face down on the surface, a phone showing a timer, the ordinary objects of a suspended moment, no people."},
+
+{n:"Первое утро после — постель",c:"портрет",
+ mk:["Barely-there + balm — morning after editorial","Natural dewy — first morning portrait","Pale glow + balm — bed morning","Glass skin + balm — soft morning","Dewy + nude — intimate morning"],
+ ot:["Белая простыня + босиком — morning after editorial","Нижнее бельё + босиком — intimate morning portrait","Мужская рубашка + босиком — morning after chic","Пижама шёлковая + босиком — soft morning","Ничего кроме простыни — editorial intimate"],
+ po:["Лежит — смотрит в потолок","Сидит — обнимает колени — простыня","Смотрит в окно — утреннее солнце","Профиль — подушки вокруг","Смотрит в камеру — нежный взгляд","Тянется — первое движение утра"],
+ bg:"Background: a sun-filled bedroom in the morning, rumpled white linen, morning light in slats through shutters, a glass of water, nothing else, no people."},
+
+{n:"Сборы перед выходом — последний штрих",c:"портрет",
+ mk:["Bold + gloss — getting ready editorial","Dewy + coral — pre-party glow","Warm bronze + nude — getting ready portrait","Barely-there + balm — pre-out portrait","Smoky + gloss — getting ready chic"],
+ ot:["Нижнее бельё + каблуки — getting ready editorial","Атласный халат + босиком — pre-party authentic","Боди + юбка + каблуки в руке — almost ready","Платье + каблуки в руке — final moments","Джинсы + бра + каблуки — getting dressed"],
+ po:["Наносит помаду — зеркало","Расчёсывает волосы — голова набок","Надевает каблук — нагнулась","Смотрит в зеркало — последняя проверка","Смотрит в камеру — готова","Брызгает духами — запястье"],
+ bg:"Background: a bedroom in pre-party chaos, an open wardrobe with clothes pulled out, a vanity mirror ringed with light, heels in a row on the floor, a champagne flute on the dresser, no people."},
+
+{n:"Зал прилётов — встреча после разлуки",c:"портрет",
+ mk:["Barely-there + balm — arrival portrait","Dewy + flushed — reunion portrait","Warm glow + balm — airport meeting","Natural + balm — arrival editorial","Glass skin + coral — reunion morning"],
+ ot:["Джинсы + свитер + кеды — casual arrival","Лёгкое пальто + джинсы + кеды — airport chic","Широкие брюки + топ + кеды — arrivals hall","Платье + пальто + босоножки — dressed up arrival","Оверсайз куртка + джинсы + кеды — travel casual"],
+ po:["Смотрит на табло прилётов — ждёт","Стоит с табличкой с именем","Бежит навстречу — увидела","Профиль — двери открываются","Смотрит в камеру — улыбка ожидания","Крепко обнимает — конец разлуки"],
+ bg:"Background: an airport arrivals hall, the sliding doors leading from customs, a row of people waiting with name cards, an overhead screen showing flight arrivals, the universal charged atmosphere of reunion, no people."},
+]);
+
+LOC.push(...[
+// ── ЖИЗНЬ — контекст и нарратив ──────────────────────────────────────────
+{n:"Первый рабочий день — офисный лифт",c:"жизнь",
+ mk:["Barely-there + balm — first day editorial","Natural + balm — new job portrait","Dewy + coral — office morning","Glass skin + balm — career start","Warm glow + balm — first day chic"],
+ ot:["Строгий костюм + каблуки — first day editorial","Широкие брюки + шёлковая блуза + каблуки — office chic","Платье-футляр + каблуки — business editorial","Смарт-кэжуал пиджак + брюки + лоферы — first day","Льняной костюм + лоферы — casual office"],
+ po:["Стоит у зеркала в лифте — порядок","Смотрит на кнопки — какой этаж","Выходит из лифта — спиной","Профиль — папка с документами","Смотрит в камеру — волнение","Глубокий вдох перед дверью"],
+ bg:"Background: a corporate office building elevator, mirrored walls, the floor indicator above the doors, the lobby visible as doors close, neutral carpet, a first day energy, no people."},
+
+{n:"Дедлайн — ночь, ноутбук, пустые стаканы",c:"жизнь",
+ mk:["Barely-there + balm — deadline night editorial","Natural + balm — work night portrait","Glass skin + balm — late night work","Pale dewy — deadline portrait","Dewy + nude — night desk"],
+ ot:["Оверсайз свитер + пижамные штаны + носки — deadline authentic","Hoodie + шорты + носки — night work casual","Мягкий co-ord + носки — late night chic","Рубашка мятая + джинсы + босиком — long day","Кашемировый свитер + леггинсы + носки — work night"],
+ po:["Уставилась в экран — красные глаза","Потянулась — долго сидела","Держит голову — думает","Профиль — ноутбук светится","Смотрит в камеру — ещё одна ночь","Засыпает за столом — книга под щекой"],
+ bg:"Background: a desk at 2am, three empty coffee cups, a laptop screen the only light, sticky notes everywhere, the window dark outside, the particular desolation of a deadline night, no people."},
+
+{n:"Рынок — ранее утро, свежий улов",c:"жизнь",
+ mk:["Fresh + coral — market morning editorial","Barely-there + balm — early market","Natural + balm — market portrait","Warm glow + balm — produce market","Dewy + flushed — market walk"],
+ ot:["Широкие брюки + топ + кеды — market morning","Льняной co-ord + кеды + корзина — farmers market chic","Джинсы + рубашка + кеды — casual market","Платье + кеды + плетёная корзина — market editorial","Оверсайз жакет + джинсы + кеды — early market"],
+ po:["Выбирает овощи — держит томат","Смотрит на прилавок — что взять","Торгуется — жест руки","Профиль — горы фруктов вокруг","Смотрит в камеру — корзина полная","Нюхает дыню — выбирает"],
+ bg:"Background: a wholesale food market at 6am, stalls of just-delivered produce, wooden crates of vegetables and fruit, the traders setting up, misty morning light, no people."},
+
+{n:"Городской балкон с огородом — помидоры",c:"жизнь",
+ mk:["Natural + balm — balcony garden editorial","Barely-there + balm — urban garden","Fresh + coral — balcony morning","Dewy + flushed — plant portrait","Warm glow + balm — gardening chic"],
+ ot:["Льняные шорты + топ + босиком — balcony garden","Платье + льняной фартук + босиком — gardening editorial","Шорты + рубашка + босиком — urban garden","Оверсайз рубашка + шорты + босиком — garden morning","Комбинезон льняной + босиком — balcony farm"],
+ po:["Срезает томат с куста — ножницы","Смотрит на рассаду — проверяет","Поливает — лейка","Профиль — город позади","Смотрит в камеру — помидор в руке","Пробует прямо с куста — вкусно"],
+ bg:"Background: a city apartment balcony converted into a productive kitchen garden, tomato plants heavy with fruit in terracotta pots, city rooftops beyond, morning sun on the leaves, no people."},
+
+{n:"Велосипед в парке — мокрая дорожка",c:"жизнь",
+ mk:["Barely-there + balm — bike park editorial","Natural + balm — cycle portrait","Fresh + coral — bike morning","Dewy + flushed — cycling chic","Warm glow + balm — park ride"],
+ ot:["Широкие брюки + топ + кеды — bike editorial","Льняной co-ord + кеды — cycle chic","Джинсы + рубашка + кеды — casual bike","Платье + кеды — park bike morning","Оверсайз жакет + джинсы + кеды — bike park"],
+ po:["Едет — смотрит вперёд","Стоит с велосипедом — парк позади","Смотрит в камеру — велосипед рядом","Профиль — мокрая дорожка","Наклонилась к рулю — скорость","Слезает — остановилась"],
+ bg:"Background: a park cycling path after rain, the tarmac darkened and reflective, wet leaves on the path, trees lining the route, a bicycle rack in the distance, overcast soft light, no people."},
+
+{n:"Бельё на верёвке — итальянский двор",c:"жизнь",
+ mk:["Barely-there + balm — laundry line editorial","Natural + balm — washing line portrait","Fresh + balm — laundry morning","Dewy + flushed — clothesline chic","Warm glow + balm — line editorial"],
+ ot:["Льняное платье + босиком — laundry morning","Шорты + топ + босиком — washing casual","Оверсайз рубашка + шорты + босиком — laundry editorial","Платье + льняной фартук + босиком — clothesline portrait","Комбинезон льняной + босиком — laundry chic"],
+ po:["Вешает простынь — руки вверх","Смотрит на ветер в белье","Профиль — ряды белья","Зажимает прищепкой — другая в зубах","Смотрит в камеру — простынь за спиной","Снимает сухое — прижимает к себе"],
+ bg:"Background: a sunny Italian courtyard with a washing line strung between windows, white sheets billowing in the breeze, terracotta tiles below, geraniums in pots on windowsills, morning light, no people."},
+]);
+
+LOC.push(...[
+// ── ДОРОГА — контекст и нарратив ─────────────────────────────────────────
+{n:"Такси — ночной город в окне",c:"дорога",
+ mk:["Barely-there + balm — taxi night editorial","Dewy + gloss — night taxi portrait","Warm glow + nude — city taxi","Glass skin + balm — night ride","Bold + gloss — taxi editorial"],
+ ot:["Вечернее платье + каблуки — after event taxi","Смокинговый жакет + брюки + каблуки — night taxi","Джинсы + рубашка + кеды — casual late taxi","Пальто + платье + каблуки — night editorial","Оверсайз куртка + джинсы + кеды — night ride"],
+ po:["Смотрит в окно — огни города","Голова на стекле — задумалась","Профиль — уличные фонари за стеклом","Смотрит в камеру — заднее сиденье","Улыбается — хорошо провела время","Платит — таксиметр"],
+ bg:"Background: the back seat of a taxi at night, the city lights streaking past the rain-dotted window, the glow of the driver's screen, the feeling of moving through a lit city, no people."},
+
+{n:"Последний рейс — пустой автобус",c:"дорога",
+ mk:["Barely-there + balm — last bus editorial","Natural + balm — empty bus portrait","Glass skin + balm — night transit","Pale dewy — late bus portrait","Dewy + nude — transit night"],
+ ot:["Пальто + джинсы + кеды — last bus casual","Оверсайз куртка + джинсы + кеды — night transit","Платье + пальто + босоножки — evening bus","Широкие брюки + свитер + кеды — late bus chic","Кожаная куртка + джинсы + кеды — night ride"],
+ po:["Сидит у окна — одна в автобусе","Смотрит в темноту за стеклом","Профиль — пустые сиденья позади","Нажимает кнопку остановки","Смотрит в камеру — салон пустой","Дремлет — голова к стеклу"],
+ bg:"Background: the interior of an empty late-night city bus, fluorescent tubes above, the wet street passing outside the steamed windows, numbered seats all empty, the driver's cab ahead, no people."},
+
+{n:"Трасса — заправка, сама за рулём",c:"дорога",
+ mk:["Barely-there + balm — road trip refuel editorial","Natural + balm — gas stop portrait","Warm glow + balm — highway fuel","Fresh + balm — refuel morning","Dewy + flushed — road refuel"],
+ ot:["Джинсы + рубашка + кеды — road trip casual","Оверсайз hoodie + шорты + кеды — highway stop","Шорты + топ + солнечные очки + кеды — summer refuel","Широкие брюки + топ + кеды — road trip chic","Платье + кеды + солнечные очки — road editorial"],
+ po:["Стоит у машины — пистолет в баке","Смотрит на табло — сколько стоит","Профиль — трасса за спиной","Чистит стекло — движение руки","Смотрит в камеру — солнечные очки","Прислонилась к машине — ждёт"],
+ bg:"Background: a highway fuel stop, a lone car at the pumps, the display counting litres, flat countryside in every direction, a convenience store behind, the open road ahead, no people."},
+
+{n:"Граница — паспортный контроль",c:"дорога",
+ mk:["Barely-there + balm — border crossing editorial","Natural + balm — passport portrait","Glass skin + balm — crossing portrait","Dewy + nude — border editorial","Warm glow + balm — checkpoint chic"],
+ ot:["Лёгкое пальто + джинсы + кеды — travel casual","Широкие брюки + топ + кеды — border editorial","Джинсы + рубашка + кеды — crossing casual","Платье + пальто + босоножки — travel chic","Оверсайз куртка + джинсы + кеды — border portrait"],
+ po:["Стоит в очереди — паспорт в руке","Смотрит в объектив — для фото","Профиль — стойка впереди","Открывает паспорт — страницы","Смотрит в камеру — нейтральное лицо","Проходит — знак двух флагов"],
+ bg:"Background: a land border crossing, a striped barrier pole, a small booth, the flags of two countries, the road ahead into the next country, the paperwork of travel, no people."},
+
+{n:"Couch surfing — утро у незнакомца",c:"дорога",
+ mk:["Barely-there + balm — couch surfing editorial","Natural + balm — traveller guest","Dewy + flushed — guest portrait","Glass skin + balm — stranger's home","Fresh + balm — travel stay"],
+ ot:["Пижама + босиком — guest morning authentic","Оверсайз hoodie + шорты + босиком — couch guest","Мягкий co-ord + носки — morning guest","Джинсы + топ + босиком — traveller morning","Широкие брюки + майка + босиком — guest editorial"],
+ po:["Просыпается на диване — незнакомая комната","Смотрит на хозяйские фотографии","Сворачивает спальник — собирается","Профиль — в чужой кухне — кофе","Смотрит в камеру — гость","Оставляет записку — уходит"],
+ bg:"Background: a stranger's living room in the morning, a made-up sofa with a folded sleeping bag, someone else's books and pictures, a guest mug on the coffee table, the quiet of an unfamiliar home, no people."},
+]);
+
+LOC.push(...[
+// ── ИНТЕРЬЕР — контекст и нарратив ───────────────────────────────────────
+{n:"Квартира-студия — всё в одной комнате",c:"интерьер",
+ mk:["Barely-there + balm — studio apartment editorial","Natural + balm — small space portrait","Dewy + coral — one room chic","Glass skin + balm — studio living","Warm glow + balm — compact interior"],
+ ot:["Шёлковая пижама + босиком — studio morning","Оверсайз свитер + леггинсы + носки — small space cosy","Льняной co-ord + босиком — studio editorial","Хлопковое платье + босиком — one room chic","Широкие брюки + топ + босиком — studio living"],
+ po:["Сидит на кровати — кухня за спиной","Готовит — рабочий стол виден","Смотрит в окно — всё в одном кадре","Профиль — функциональность","Смотрит в камеру — своё маленькое королевство","Раскладывает диван — вечер"],
+ bg:"Background: a well-designed studio apartment where the kitchen, bedroom and living area flow into one space, maximised storage, a Murphy bed folded up, clever compact living, good morning light, no people."},
+
+{n:"Ремонт — голые стены и запах краски",c:"интерьер",
+ mk:["Barely-there + balm — renovation editorial","Natural + balm — painting walls portrait","Dewy + flushed — reno morning","Glass skin + balm — fresh walls","Warm glow + balm — renovation chic"],
+ ot:["Комбинезон малярный + кеды — renovation authentic","Старые джинсы + белая рубашка (запачканная) + кеды — painting casual","Оверсайз рубашка + шорты + кеды — DIY editorial","Льняной комбинезон + кеды — renovation chic","Комбинезон + босиком — painting portrait"],
+ po:["Держит валик — рядом с мокрой стеной","Смотрит на прогресс — доволен","Профиль — плёнка на полу","Смотрит в камеру — краска на щеке","Открывает банку — цвет выбран","Делает первый мазок — начало"],
+ bg:"Background: an apartment mid-renovation, bare plaster walls, dust sheets over the floor, tins of paint in a chosen colour, a roller tray, the smell of fresh paint, full of potential, no people."},
+
+{n:"Тёмная спальня — только ночник",c:"интерьер",
+ mk:["Barely-there + balm — bedside light editorial","Natural + balm — nightstand portrait","Glass skin + balm — night reading","Pale dewy — lamp portrait","Dewy + nude — dark room editorial"],
+ ot:["Нижнее бельё шёлковое + босиком — bedroom night editorial","Шёлковая пижама + босиком — nightstand portrait","Мужская рубашка + босиком — reading night","Хлопковый co-ord + босиком — night chic","Ничего + простыня — intimate editorial"],
+ po:["Читает — ночник светит снизу","Смотрит в темноту комнаты","Кладёт книгу — закрывает глаза","Профиль — мягкий свет на лице","Смотрит в камеру — ночь","Тянется за водой — тихое движение"],
+ bg:"Background: a dark bedroom with only a single warm bedside lamp creating a circle of light, the rest of the room in shadow, white bedlinen, a book and a glass of water, deep night, no people."},
+
+{n:"Новый пустой дом — первый вечер",c:"интерьер",
+ mk:["Barely-there + balm — new home editorial","Natural + balm — empty house portrait","Dewy + flushed — first night","Glass skin + balm — moving in","Warm glow + balm — new chapter"],
+ ot:["Джинсы + рубашка + кеды — moving day","Оверсайз свитер + джинсы + кеды — first night","Широкие брюки + топ + кеды — new home chic","Мягкий co-ord + носки — first evening","Льняное платье + кеды — new home editorial"],
+ po:["Сидит на полу — пустая комната","Смотрит на голые стены — думает о будущем","Обнимает колени — одна в тишине","Профиль — окно и вечер","Смотрит в камеру — начало чего-то","Лежит на полу — смотрит в потолок"],
+ bg:"Background: a completely empty apartment on the first evening after moving in, bare wooden floors, white walls, a single overhead light, the windows showing the neighbourhood outside, one pizza box, no people."},
+
+{n:"Воскресное утро — шторы задёрнуты",c:"интерьер",
+ mk:["Barely-there + balm — sunday morning editorial","Natural + balm — slow morning portrait","Dewy + nude — curtains morning","Glass skin + balm — lazy sunday","Pale dewy — curtain light"],
+ ot:["Пижама шёлковая + босиком — sunday morning","Нижнее + простыня + босиком — lazy sunday editorial","Мужская рубашка + босиком — slow morning","Мягкий co-ord + босиком — cosy sunday","Оверсайз свитер + трусы + носки — authentic morning"],
+ po:["Лежит в постели — свет сквозь шторы","Открывает одну штору — прищурилась","Смотрит на полоску света на полу","Профиль — свет пробивается","Смотрит в камеру — ещё сонная","Потянулась — хорошо"],
+ bg:"Background: a bedroom on a Sunday morning with heavy curtains drawn, a single bar of light falling across the floor, the sound of the city faint outside, rumpled bed, a quiet unhurried morning, no people."},
+
+{n:"Подоконник — книга и чашка чая",c:"интерьер",
+ mk:["Barely-there + balm — windowsill editorial","Natural + balm — window reading portrait","Dewy + nude — sill chic","Glass skin + balm — windowsill morning","Warm glow + balm — reading window"],
+ ot:["Оверсайз свитер + леггинсы + носки — windowsill cosy","Шёлковый халат + босиком — window morning","Льняное платье + босиком — sill editorial","Хлопковый co-ord + носки — reading morning","Мягкий knit + шорты + носки — window chic"],
+ po:["Сидит на подоконнике — ноги внутрь","Читает — чай рядом","Смотрит на улицу — задумалась","Профиль — дождь снаружи","Смотрит в камеру — уют","Держит чашку — обеими руками"],
+ bg:"Background: a deep windowsill wide enough to sit on, a view of a quiet street or garden, a book face down, a cooling cup of tea, a plant on one side, the perfect reading nook, no people."},
+]);
+
+LOC.push(...[
+// ── ЛАКШЕРИ — контекст и нарратив ────────────────────────────────────────
+{n:"Ювелирный аукцион — лот под стеклом",c:"лакшери",
+ mk:["Bold + nude — auction editorial","Dewy + gloss — jewellery auction","Warm bronze + balm — auction portrait","Barely-there + balm — auction house","Glass skin + balm — lot preview"],
+ ot:["Смокинговый жакет + брюки + каблуки — auction editorial","Чёрное платье + каблуки — sotheby's chic","Широкие брюки + шёлковый топ + каблуки — auction portrait","Бархатное платье + каблуки — bidding evening","Платье миди + каблуки — auction house chic"],
+ po:["Рассматривает лот в витрине — лупа","Читает каталог — серьёзно","Поднимает табличку — ставка","Профиль — зал аукциона позади","Смотрит в камеру — до торгов","Шепчет — советуется"],
+ bg:"Background: a Christie's or Sotheby's auction preview, a single important jewel on a velvet stand under a spotlight in a locked case, the auction catalogue on a podium, white gloves nearby, no people."},
+
+{n:"Личный стилист — полная примерка",c:"лакшери",
+ mk:["Dewy + coral — personal stylist editorial","Barely-there + balm — styling session","Warm glow + balm — wardrobe curation","Natural + balm — stylist portrait","Glass skin + balm — fitting session"],
+ ot:["Нижнее + каблуки — fitting editorial","Нижнее + халат — between outfits","Первый outfit + каблуки — mirror check","Второй outfit + каблуки — оценивает","Финальный look + каблуки — одобрение"],
+ po:["Стоит перед тремя зеркалами — оценивает","Смотрит на развешанные варианты","Снимает одно — надевает другое","Профиль — стилист рядом","Смотрит в камеру — финальный look","Поворачивается — ищет угол"],
+ bg:"Background: a private personal shopping suite in a luxury department store, rails of pre-selected garments, three-way mirrors, a champagne trolley, the exclusive service of a personal stylist session, no people."},
+
+{n:"Завтрак на борту частного самолёта",c:"лакшери",
+ mk:["Dewy + coral — private jet breakfast editorial","Barely-there + balm — jet breakfast","Warm glow + gloss — onboard morning","Natural + balm — jet interior","Glass skin + coral — flight breakfast"],
+ ot:["Шёлковая пижама + босиком — jet morning","Кашемировый co-ord + кеды — onboard casual","Атласный халат + босиком — jet luxury","Широкие брюки + трикотажный топ + кеды — flight chic","Льняной co-ord + кеды — jet editorial"],
+ po:["Сидит у иллюминатора — завтрак","Смотрит на облака — кофе в руке","Профиль — кресло бизнес-класса","Разворачивает газету — высота","Смотрит в камеру — высоко над облаками","Регулирует кресло — устраивается"],
+ bg:"Background: the interior of a private jet at cruising altitude, white leather recliners, a polished table set for breakfast with monogrammed china, clouds visible through the oval windows, no people."},
+
+{n:"Личный консьерж — бронирование на вечер",c:"лакшери",
+ mk:["Barely-there + balm — concierge editorial","Natural + balm — concierge portrait","Dewy + coral — hotel service","Glass skin + balm — front desk luxury","Warm glow + balm — personal manager"],
+ ot:["Элегантный костюм + каблуки — concierge editorial","Широкий блейзер + прямые брюки + каблуки — service portrait","Платье миди + каблуки — hotel editorial","Шёлковая блуза + прямые брюки + каблуки — concierge chic","Монохромный look + каблуки — personal service"],
+ po:["Говорит по телефону — бронирует","Изучает план ресторана — выбирает","Профиль — записная книжка","Улыбается — всё устроено","Смотрит в камеру — готово","Открывает дверь — сопровождает"],
+ bg:"Background: a luxury hotel concierge desk, a polished surface with a leather-bound booking register, white orchids, the lobby visible behind, the understated opulence of perfect service, no people."},
+
+{n:"Стол шефа — мишленовская кухня",c:"лакшери",
+ mk:["Bold red lip + liner — chef's table editorial","Dewy + gloss — tasting menu portrait","Warm bronze + coral — michelin evening","Barely-there + balm — chef's table chic","Smoky + nude — tasting evening"],
+ ot:["Чёрное вечернее платье + каблуки — michelin editorial","Широкие брюки + шёлковый топ + каблуки — tasting menu chic","Шёлковое платье + каблуки — chef's table","Бархатное платье + каблуки — michelin evening","Платье миди + каблуки — tasting editorial"],
+ po:["Наблюдает как шеф финиширует блюдо","Рассматривает подачу — восхищена","Профиль — кухня видна за стеклом","Слушает объяснение блюда","Смотрит в камеру — финальный курс","Делает первый укус — реакция"],
+ bg:"Background: a chef's table in a Michelin-starred kitchen, a private counter looking directly into the working kitchen, a single elaborate dish being finished by the head chef, the controlled theatre of fine dining, no people."},
+]);
+
 // ═══════════════════════════════════════════════════════════════════════════
 // LOCALSTORAGE PERSISTENCE
 // ═══════════════════════════════════════════════════════════════════════════
