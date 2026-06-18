@@ -2,6 +2,9 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Photo Prompt Builder v3</title>
 <style>
@@ -85903,7 +85906,8 @@ function renderOutfitList() {
   filteredOt.forEach(({opt, i}) => {
     const d = document.createElement('div');
     d.className = 'card' + (state.outfit === i ? ' sel' : '');
-    d.innerHTML = `<div class="card-num">Вариант ${i+1}</div>${opt}`;
+    const safeOpt = String(opt).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    d.innerHTML = `<div class="card-num">Вариант ${i+1}</div>${safeOpt}`;
     d.addEventListener('click', () => {
       state.outfit = i;
       el.querySelectorAll('.card').forEach(c => c.classList.remove('sel'));
@@ -86258,6 +86262,15 @@ function updateProgress() {
 // PROMPT GENERATION
 // ═══════════════════════════════════════════════════════════════════════════
 function updatePrompt() {
+  try { _updatePrompt(); } catch(e) {
+    console.error('updatePrompt error:', e);
+    const copyBtn = document.getElementById('copyBtn');
+    const badge = document.getElementById('readyBadge');
+    if (badge) { badge.textContent = 'Ошибка: ' + e.message; badge.className = 'badge-wait'; }
+    if (copyBtn) copyBtn.disabled = true;
+  }
+}
+function _updatePrompt() {
   const out = document.getElementById('promptOut');
   const badge = document.getElementById('readyBadge');
   const counter = document.getElementById('charCount');
@@ -86389,7 +86402,7 @@ function updatePrompt() {
   counter.textContent = prompt.length.toLocaleString('ru') + ' символов';
   copyBtn.disabled   = !isReady;
   saveState();
-}
+} // end _updatePrompt
 
 // ═══════════════════════════════════════════════════════════════════════════
 // RECREATE PHOTO PROMPT
