@@ -85802,6 +85802,16 @@ function selectLoc(i) {
   updateProgress();
   updatePrompt();
 
+  // Auto-show prompt panel when location is selected
+  const _po = document.getElementById('promptOut');
+  const _pf = document.getElementById('promptFooter');
+  const _pi = document.getElementById('promptToggleIcon');
+  if (_po && _po.style.display === 'none') {
+    _po.style.display = 'block';
+    if (_pf) _pf.style.display = 'flex';
+    if (_pi) _pi.textContent = '▼ скрыть';
+  }
+
   // If current location category has space descriptions — stay on loc tab and scroll to them
   const cat = LOC[i].c;
   const hasSpaces = CAMERA_SPACES[cat] && CAMERA_SPACES[cat].length > 0;
@@ -86334,14 +86344,12 @@ function updatePrompt() {
 
   // FREE CUSTOM — removed
 
-  // isReady: Локация + Макияж + Одежда + Причёска + Поза + Камера — все обязательны (выбор ИЛИ своё пожелание)
+  // isReady: Локация + Макияж + Одежда + Поза — обязательны; Причёска и Камера — опциональны
   const locOk    = state.loc    !== null;
   const makeupOk = state.makeup !== null || cMakeup.length > 0;
   const outfitOk = state.outfit !== null || cOutfit.length > 0;
-  const hairOk   = state.hair   !== null || cHair.length   > 0;
   const poseOk   = state.poses.size > 0 || state.pose !== null || cPose.length > 0;
-  const cameraOk = state.camera !== null || cCamera.length > 0;
-  const isReady  = locOk && makeupOk && outfitOk && hairOk && poseOk && cameraOk;
+  const isReady  = locOk && makeupOk && outfitOk && poseOk;
 
   // Render as clickable blocks
   const _blocks = [
@@ -86366,7 +86374,7 @@ function updatePrompt() {
     </div>${i < _blocks.length-1 ? '<div class="pblock-sep"></div>' : ''}
   `).join('');
 
-  badge.textContent  = isReady ? '✓ Готов к копированию' : 'Выберите макияж, одежду и позу';
+  badge.textContent  = isReady ? '✓ Готов к копированию' : (!locOk ? 'Выберите локацию' : !makeupOk ? 'Выберите макияж' : !outfitOk ? 'Выберите одежду' : 'Выберите позу');
   badge.className    = isReady ? 'badge-ready' : 'badge-wait';
   counter.textContent = prompt.length.toLocaleString('ru') + ' символов';
   copyBtn.disabled   = !isReady;
