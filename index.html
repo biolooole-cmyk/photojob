@@ -85612,8 +85612,14 @@ function loadState() {
         pose: saved.pose ?? null, camera: saved.camera ?? null,
         hands: saved.hands ?? null, decollete: saved.decollete ?? false
       });
-      if (Array.isArray(saved.extras)) saved.extras.forEach(i => extras.add(i));
-      if (Array.isArray(saved.accItems)) saved.accItems.forEach(i => accItems.add(i));
+      if (Array.isArray(saved.extras)) saved.extras.forEach(i => { if (EXTRAS[i]) extras.add(i); });
+      if (Array.isArray(saved.accItems)) saved.accItems.forEach(i => { if (ACC[i]) accItems.add(i); });
+      // Validate indices against current array sizes
+      if (state.makeup !== null && state.loc !== null && (!LOC[state.loc] || !LOC[state.loc].mk[state.makeup])) state.makeup = null;
+      if (state.outfit !== null && state.loc !== null && (!LOC[state.loc] || !LOC[state.loc].ot[state.outfit])) state.outfit = null;
+      if (state.hair !== null && !HAIR[state.hair]) state.hair = null;
+      if (state.camera !== null && !CAM[state.camera]) state.camera = null;
+      if (state.hands !== null && !HANDS[state.hands]) state.hands = null;
     }
     const savedHistory = JSON.parse(localStorage.getItem(LS_HISTORY) || '[]');
     if (Array.isArray(savedHistory)) history.push(...savedHistory);
@@ -86286,20 +86292,21 @@ function _updatePrompt() {
   }
 
   const item = LOC[state.loc];
-  const allPoses = [...item.po, ...SPECIAL_POSES];
+  if (!item) { state.loc = null; copyBtn.disabled = true; return; }
+  const allPoses = [...(item.po || []), ...SPECIAL_POSES];
 
-  const mk   = state.makeup !== null ? item.mk[state.makeup] : '[выберите макияж]';
-  const ot   = state.outfit !== null ? item.ot[state.outfit] : '[выберите одежду]';
-  const pObj = state.pose   !== null ? allPoses[state.pose]  : null;
+  const mk   = (state.makeup !== null && item.mk?.[state.makeup]) ? item.mk[state.makeup] : (state.makeup !== null ? (state.makeup = null, '[выберите макияж]') : '[выберите макияж]');
+  const ot   = (state.outfit !== null && item.ot?.[state.outfit]) ? item.ot[state.outfit] : (state.outfit !== null ? (state.outfit = null, '[выберите одежду]') : '[выберите одежду]');
+  const pObj = (state.pose !== null && allPoses[state.pose]) ? allPoses[state.pose] : null;
   const poseTexts = state.poses.size > 0
-    ? [...state.poses].map(idx => { const o = allPoses[idx]; return typeof o === 'object' ? o.t : o; })
+    ? [...state.poses].filter(idx => allPoses[idx]).map(idx => { const o = allPoses[idx]; return typeof o === 'object' ? o.t : o; })
     : (pObj ? [typeof pObj === 'object' ? pObj.t : pObj] : []);
   const po   = poseTexts.length > 0 ? poseTexts.join(' / ') : '[выберите позу]';
-  const hair = state.hair   !== null ? HAIR[state.hair].t   : null;
-  const cam  = state.camera !== null ? CAM[state.camera].t  : null;
-  const extraTexts = [...extras].sort().map(i => EXTRAS[i].t);
-  const accTexts = [...accItems].sort().map(i => ACC[i].t);
-  const handsText = state.hands !== null ? HANDS[state.hands].t : null;
+  const hair = (state.hair !== null && HAIR[state.hair]) ? HAIR[state.hair].t : null;
+  const cam  = (state.camera !== null && CAM[state.camera]) ? CAM[state.camera].t : null;
+  const extraTexts = [...extras].sort().filter(i => EXTRAS[i]).map(i => EXTRAS[i].t);
+  const accTexts = [...accItems].sort().filter(i => ACC[i]).map(i => ACC[i].t);
+  const handsText = (state.hands !== null && HANDS[state.hands]) ? HANDS[state.hands].t : null;
 
   // Camera space frame — optional background fragment
   const cat = item.c;
