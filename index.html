@@ -388,6 +388,9 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .hist-toggle-btn{position:fixed;top:calc(50% - 60px);right:0;transform:translateY(-50%);background:var(--accent);color:#fff;border:none;border-radius:8px 0 0 8px;padding:12px 8px;cursor:pointer;writing-mode:vertical-rl;font-size:11px;font-weight:700;letter-spacing:.5px;z-index:99;box-shadow:-2px 0 8px rgba(0,0,0,.2)}
 /* ── LEFT SIDE BUTTON: Умный поиск ── */
 .smart-toggle-btn{position:fixed;top:50%;left:0;transform:translateY(-50%);background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;border-radius:0 8px 8px 0;padding:12px 8px;cursor:pointer;writing-mode:vertical-rl;font-size:11px;font-weight:700;letter-spacing:.5px;z-index:99;box-shadow:2px 0 8px rgba(0,0,0,.2)}
+/* ── RIGHT SIDE BUTTON: Копия фото ── */
+.recreate-toggle-btn{position:fixed;top:calc(50% + 55px);right:0;transform:translateY(-50%);background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;border-radius:8px 0 0 8px;padding:12px 8px;cursor:pointer;writing-mode:vertical-rl;font-size:11px;font-weight:700;letter-spacing:.5px;z-index:99;box-shadow:-2px 0 8px rgba(0,0,0,.2)}
+.recreate-toggle-btn:hover{background:linear-gradient(135deg,#6d28d9,#9333ea)}
 /* ── BOTTOM 3 BUTTONS responsive ── */
 @media (max-width:700px){
   .color-toggle-btn{left:calc(50% - 110px)!important}
@@ -591,7 +594,6 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
       <div class="pbox-hdr-right">
         <span id="readyBadge" class="badge-wait">Выберите параметры</span>
         <button class="btn btn-dark" id="copyBtn" onclick="event.stopPropagation();copyPrompt()" disabled style="padding:4px 12px;font-size:11px">📋 Копировать</button>
-        <button class="btn" id="recreateBtn" onclick="event.stopPropagation();openRecreatePanel()" disabled style="padding:4px 12px;font-size:11px;background:#7c3aed;color:#fff;border:none;border-radius:6px">🪞 Копия фото</button>
         <span id="promptToggleIcon" style="font-size:11px;color:var(--muted);white-space:nowrap">▶ показать</span>
       </div>
     </div>
@@ -738,6 +740,9 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 <button class="hist-toggle-btn" onclick="toggleHistWindow()" id="histToggleBtn">
   📋 История<span class="hist-badge" id="histBadge" style="display:none">0</span>
 </button>
+
+<!-- RECREATE PHOTO SIDE BUTTON -->
+<button class="recreate-toggle-btn" id="recreateBtn" onclick="openRecreatePanel()">🪞 Копия фото</button>
 
 <div class="hist-window" id="histWindow">
   <div class="hist-win-hdr">
@@ -86365,8 +86370,6 @@ function updatePrompt() {
   badge.className    = isReady ? 'badge-ready' : 'badge-wait';
   counter.textContent = prompt.length.toLocaleString('ru') + ' символов';
   copyBtn.disabled   = !isReady;
-  const rb = document.getElementById('recreateBtn');
-  if (rb) rb.disabled = !isReady;
   saveState();
 }
 
@@ -86412,7 +86415,10 @@ function openRecreatePanel() {
   const overlay = document.getElementById('recreateOverlay');
   if (!panel) return;
   const prompt = buildRecreatePrompt();
-  if (!prompt) return;
+  if (!prompt) {
+    alert('Сначала выберите локацию, макияж, одежду и позу, чтобы сформировать промпт.');
+    return;
+  }
   document.getElementById('recreatePromptBox').textContent = prompt;
   updateRecreateFinal();
   panel.style.display = 'flex';
