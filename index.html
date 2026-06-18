@@ -86299,7 +86299,8 @@ function updatePrompt() {
   const finalLoc    = item.bg + (spaceFrameText ? ` FRAME DETAIL: ${spaceFrameText}` : '') + (cLoc ? ` ${cLoc}` : '');
   const finalMakeup = (mk    || '') + (cMakeup ? ` ${cMakeup}` : '');
   const decolleteText = state.decollete ? ' IMPORTANT: The outfit must also feature a very deep neckline or low-cut décolleté that prominently showcases the woman\'s large, beautiful, natural breasts — generous, tasteful but unmistakable cleavage.' : '';
-  const finalOutfit = (ot || '') + (cOutfit ? ` ${cOutfit}` : '') + decolleteText;
+  const necklineReq = ' NECKLINE TYPE: The top or dress must feature a very deep, very wide décolleté — specifically one of these neckline styles: balconette (балконет), push-up, plunge / plongé (глубокий V-вырез), corset neckline (корсетный вырез), bralette, bustier (бюстье), or corbeil — the neckline must be maximally wide and deeply cut, lifting and fully showcasing the bust. The bust is prominently displayed in the décolleté.';
+  const finalOutfit = (ot || '') + (cOutfit ? ` ${cOutfit}` : '') + decolleteText + necklineReq;
   const finalHair   = (hair  || '') + (cHair   ? ` ${cHair}`   : '');
   const finalPose   = (po    || '') + (cPose   ? ` ${cPose}`   : '');
   const finalCamera = (cam   || '') + (cCamera ? ` ${cCamera}` : '');
