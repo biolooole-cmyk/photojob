@@ -85791,6 +85791,8 @@ function switchTab(id, btn) {
   if (id === 'outfit') renderOutfitList();
   if (id === 'pose')   renderPoseList();
   if (id === 'hands')  updateHandsTabState();
+  if (id === 'extras') renderExtrasList();
+  if (id === 'acc')    renderAccList();
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -85841,6 +85843,8 @@ function selectLoc(i) {
   renderHairList();
   renderPoseList();
   renderCameraList();
+  renderExtrasList();
+  renderAccList();
   updateHandsTabState();
   updateProgress();
   updatePrompt();
