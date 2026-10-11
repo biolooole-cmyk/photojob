@@ -129955,11 +129955,11 @@ function _updateMrPrompt() {
 
   const accTexts   = [...accItems].sort().filter(i => ACC[i]).map(i => ACC[i].t);
   const cAcc       = (document.getElementById('custom-acc')?.value || '').trim();
-  const camText    = null;
+  const camText    = (state.camera !== null && CAM[state.camera]) ? CAM[state.camera].t : null;
   const cCamera    = (document.getElementById('custom-camera')?.value || '').trim();
   const extraTexts = [...extras].sort().filter(i => EXTRAS[i]).map(i => EXTRAS[i].t);
   const cExtras    = (document.getElementById('custom-extras')?.value || '').trim();
-  const photoTexts = [];
+  const photoTexts = [...photoFeatures].sort().filter(i => PHOTO_FEATURES[i]).map(i => PHOTO_FEATURES[i].t);
   const customPhoto = (document.getElementById('custom-photo')?.value || '').trim();
 
   const SELF_CONTAINED = ['detailed','kopiya','zhivaya','zhivaya_telo','proportions','litso','zoom'];
@@ -129988,6 +129988,7 @@ function _updateMrPrompt() {
     if (accTexts.length > 0 || cAcc) customLines.push(`— Accessories: ${[...accTexts, ...(cAcc ? [cAcc] : [])].join(', ')}`);
     if (camText || cCamera) customLines.push(`— Camera: ${[camText, cCamera].filter(Boolean).join(' ')}`);
     if (extraTexts.length > 0 || cExtras) customLines.push(`— Additional: ${[...extraTexts, ...(cExtras ? [cExtras] : [])].join('; ')}`);
+    if (photoTexts.length > 0 || customPhoto.trim()) customLines.push(`— Photo style: ${[...photoTexts, ...(customPhoto.trim() ? [customPhoto.trim()] : [])].join('; ')}`);
     if (faceSourceText) customLines.unshift(`— Face & hair source: ${faceSourceText}`);
     if (poseSourceText) customLines.unshift(`— Pose & angle source: ${poseSourceText}`);
     if (customLines.length > 0) {
@@ -130032,6 +130033,7 @@ function _updateMrPrompt() {
     if (accTexts.length > 0 || cAcc) customLines.push(`— Accessories: ${[...accTexts, ...(cAcc ? [cAcc] : [])].join(', ')}`);
     if (camText || cCamera) customLines.push(`— Camera: ${[camText, cCamera].filter(Boolean).join(' ')}`);
     if (extraTexts.length > 0 || cExtras) customLines.push(`— Additional: ${[...extraTexts, ...(cExtras ? [cExtras] : [])].join('; ')}`);
+    if (photoTexts.length > 0 || customPhoto.trim()) customLines.push(`— Photo style: ${[...photoTexts, ...(customPhoto.trim() ? [customPhoto.trim()] : [])].join('; ')}`);
     if (faceSourceText) customLines.unshift(`— Face & hair source: ${faceSourceText}`);
     if (poseSourceText) customLines.unshift(`— Pose & angle source: ${poseSourceText}`);
     if (customLines.length > 0) blocks.push({ label: 'SPECIFIC CHANGES', text: customLines.join('\n') });
@@ -130386,9 +130388,11 @@ function _updateMagPrompt() {
 
   const accTexts  = [...accItems].sort().filter(i => ACC[i]).map(i => ACC[i].t);
   const cAcc      = (document.getElementById('custom-acc')?.value || '').trim();
+  const camCardText = (state.camera !== null && CAM[state.camera]) ? CAM[state.camera].t : null;
   const cCamera   = (document.getElementById('custom-camera')?.value || '').trim();
   const extraTexts = [...extras].sort().filter(i => EXTRAS[i]).map(i => EXTRAS[i].t);
   const cExtras   = (document.getElementById('custom-extras')?.value || '').trim();
+  const photoCardTexts = [...photoFeatures].sort().filter(i => PHOTO_FEATURES[i]).map(i => PHOTO_FEATURES[i].t);
   const customPhoto = (document.getElementById('custom-photo')?.value || '').trim();
 
   const _poseObj = hasPoseSelected
@@ -130426,10 +130430,12 @@ function _updateMagPrompt() {
   if (locText)    parts.push(`**LOCATION:** ${locText} Crop at mid-thigh, woman centered.`);
   const amateurCamText = _mag.amateurCam ? '**CAMERA — MAXIMUM AMATEUR STYLE:** This must look like a genuine private snapshot taken on a cheap or mid-range smartphone in a real everyday moment. TECHNICAL: slight lens distortion, mild digital noise/grain, automatic white balance with slight color cast, occasional mild overexposure on bright areas. FRAMING: slightly imperfect — not perfectly centered, slight tilt 1-3°, subject partially cut or tighter than intended. FOCUS: auto-focus lock may be slightly imprecise — subject sharp but not pixel-perfect. SHAKE: barely perceptible micro-blur from handheld movement. LIGHT: purely ambient — window light, room lamp, outdoor daylight — zero flash, zero ring light, zero softbox. ZERO professional photography aesthetics: no bokeh, no depth-of-field blur, no cinematic grade, no beauty filter, no editorial composition. The image must read as a real private photo taken spontaneously by someone who is not a photographer.' : null;
   if (amateurCamText) parts.push(amateurCamText);
-  if (cCamera)    parts.push(`**CAMERA:** ${cCamera}`);
+  const _allCamParts = [camCardText, cCamera].filter(Boolean);
+  if (_allCamParts.length) parts.push(`**CAMERA:** ${_allCamParts.join(' ')}`);
   const _magShorten = t => { const m = t.match(/^.*?[.!?](?:\s|$)/); return m ? m[0].trim() : t.slice(0, 120).trim(); };
   if (extraTexts.length > 0 || cExtras) parts.push(`**ADDITIONAL:** ${[...extraTexts.map(_magShorten),...(cExtras?[cExtras.slice(0,120)]:[])].join(' ')}`);
-  if (customPhoto.trim()) parts.push(`**PHOTO STYLE:** ${customPhoto.trim()}`);
+  const _allPhotoTexts = [...photoCardTexts, ...(customPhoto.trim() ? [customPhoto.trim()] : [])];
+  if (_allPhotoTexts.length) parts.push(`**PHOTO STYLE:** ${_allPhotoTexts.join(' ')}`);
   parts.push(MAG_STYLE);
   parts.push(MAG_QUALITY);
   parts.push(MAG_NEGATIVE);
@@ -130453,10 +130459,10 @@ function _updateMagPrompt() {
   if (handsText)    blocks.push({ label: 'HANDS',        text: `* ${handsText}` });
   if (locText)      blocks.push({ label: 'RECREATE FROM THE ORIGINAL', text: `* ${locText}\n* Crop at mid-thigh. Woman centered.` });
   if (amateurCamText) blocks.push({ label: 'CAMERA — AMATEUR', text: amateurCamText });
-  if (cCamera)      blocks.push({ label: 'CAMERA',       text: cCamera });
+  if (camCardText || cCamera) blocks.push({ label: 'CAMERA', text: [camCardText, cCamera].filter(Boolean).join('\n') });
   blocks.push({ label: '📋 ЛЮБИТЕЛЬСКИЙ ПРОМПТ — 1 КЛИК', text: 'MAXIMUM AMATEUR PHOTO REALISM — MANDATORY: This image must look EXACTLY like a real private photo taken on an ordinary smartphone by a non-professional. TECHNICAL: slight natural lens distortion, mild digital noise and grain, auto white balance with realistic color cast, auto exposure with slight over/under-exposure, subtle JPEG compression artifacts, autofocus — subject sharp but not clinical. FRAMING: slightly imperfect composition, subject not perfectly centered, slight unintentional tilt 1-4°. LIGHT: 100% ambient only — window, room lamp, outdoor daylight — zero flash, zero ring light, zero softbox. FEEL: real spontaneous moment, woman genuinely natural and comfortable, reads as a real phone gallery photo. Zero beauty filter, zero professional retouching, zero studio aesthetic. BACKGROUND: sharp and in focus — zero background blur, zero bokeh, zero depth-of-field effect — smartphone cameras do not blur backgrounds, everything stays sharp as in a real phone photo.\n\nSKIN — MAXIMUM REALISM & TEXTURE — MANDATORY: The skin must look like a real human photographed in natural light — not retouched, not filtered, not AI-smoothed. TEXTURE: natural skin texture throughout — visible pores, especially on nose and cheeks, fine expression lines, micro-relief, real skin surface that catches light naturally. COLOR: natural uneven skin tone — slight redness on cheeks/nose/around eyes, subtle variations, natural blemishes/freckles, real skin translucency. LIGHT: natural ambient — light catches micro-texture, shadows fall into pores and fine lines. FEEL: skin looks touchably real — no plastic, no wax, no CGI, no porcelain effect, no beauty mode, zero artificial smoothing, zero AI-generated smoothness.' });
   if (extraTexts.length > 0 || cExtras) blocks.push({ label: 'ADDITIONAL', text: [...extraTexts,...(cExtras?[cExtras]:[])].join('\n\n') });
-  if (customPhoto.trim()) blocks.push({ label: 'PHOTO STYLE', text: customPhoto.trim() });
+  if (photoCardTexts.length > 0 || customPhoto.trim()) blocks.push({ label: 'PHOTO STYLE', text: [...photoCardTexts,...(customPhoto.trim()?[customPhoto.trim()]:[])].join('\n\n') });
   blocks.push({ label: 'STYLE',            text: MAG_STYLE });
   blocks.push({ label: 'QUALITY',          text: MAG_QUALITY });
   blocks.push({ label: 'Negative prompt',  text: MAG_NEGATIVE });
