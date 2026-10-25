@@ -130710,6 +130710,13 @@ function setMrBase(type) {
     const btn = document.getElementById('mrBase_' + t);
     if (btn) btn.classList.toggle('active', t === type);
   });
+  if (type === 'proportions' || type === 'zhivaya_telo' || type === 'detailed' || type === 'zoom') {
+    _mr.bigBust   = true;
+    _mr.decollete = true;
+    _mr.noDecollete = false;
+    const activeTab = document.querySelector('#mrTabBtns .tab-btn.active');
+    if (activeTab && activeTab.getAttribute('data-tab') === 'outfit') renderMrOutfitTab();
+  }
   updatePrompt();
 }
 
@@ -131495,6 +131502,13 @@ function setMagBase(type) {
     const btn = document.getElementById('magBase_' + t);
     if (btn) btn.classList.toggle('active', t === type);
   });
+  if (type === 'proportions' || type === 'zhivaya_telo' || type === 'detailed' || type === 'zoom') {
+    _mag.bigBust   = true;
+    _mag.decollete = true;
+    _mag.noDecollete = false;
+    const activeTab = document.querySelector('#magTabBtns .tab-btn.active');
+    if (activeTab && activeTab.getAttribute('data-tab') === 'outfit') renderMagOutfitTab();
+  }
   updatePrompt();
 }
 
