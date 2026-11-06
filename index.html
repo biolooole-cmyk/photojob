@@ -835,11 +835,12 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
         <div class="custom-label">✏️ Свои пожелания к позе</div>
         <textarea class="custom-inp" id="custom-pose" placeholder="Добавится к выбранной позе в той же секции. Например: 'очень расслабленная', 'смотрит вниз'. Можно заполнить вместо выбора." oninput="updatePrompt()">поза расслабленная, улыбается, девушка повернута декольте и лицом в камеру</textarea>
       </div>
-      <div class="legend">
-        <span class="legend-item"><span class="pill pill-s">📱 СЕЛФИ</span> селфи</span>
-        <span class="legend-item"><span class="pill pill-m">🪞 ЗЕРКАЛО</span> зеркало</span>
-        <span class="legend-item"><span class="pill pill-f">💋 ФЛИРТ</span> флирт</span>
-        <span class="legend-item"><span class="pill pill-a">⚡ ДЕЙСТВИЕ</span> действие</span>
+      <div class="legend" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px">
+        <span class="legend-item pose-kind-btn" data-kind="" onclick="setPoseKindFilter('')" style="cursor:pointer;padding:3px 7px;border-radius:12px;border:1px solid #ccc;font-size:12px">Все</span>
+        <span class="legend-item pose-kind-btn" data-kind="selfie" onclick="setPoseKindFilter('selfie')" style="cursor:pointer"><span class="pill pill-s">📱 СЕЛФИ</span></span>
+        <span class="legend-item pose-kind-btn" data-kind="mirror" onclick="setPoseKindFilter('mirror')" style="cursor:pointer"><span class="pill pill-m">🪞 ЗЕРКАЛО</span></span>
+        <span class="legend-item pose-kind-btn" data-kind="flirt" onclick="setPoseKindFilter('flirt')" style="cursor:pointer"><span class="pill pill-f">💋 ФЛИРТ</span></span>
+        <span class="legend-item pose-kind-btn" data-kind="action" onclick="setPoseKindFilter('action')" style="cursor:pointer"><span class="pill pill-a">⚡ ДЕЙСТВИЕ</span></span>
       </div>
       <input class="search-inp" id="poseSearch" type="text" placeholder="🔍 Поиск позы..." oninput="renderPoseList()">
       <div class="choice-group" id="poseList"><div class="empty-hint">Сначала выберите локацию</div></div>
@@ -98101,6 +98102,15 @@ function renderSpaceFrameList() {
 let _currentMode = 'main';
 let _selectedRef = null;
 let _lastPrompt = '';
+let _poseKindFilter = '';
+function setPoseKindFilter(kind) {
+  _poseKindFilter = kind;
+  document.querySelectorAll('.pose-kind-btn').forEach(b => {
+    b.style.fontWeight = b.dataset.kind === kind ? 'bold' : '';
+    b.style.outline = b.dataset.kind === kind ? '2px solid #888' : '';
+  });
+  renderPoseList();
+}
 
 function setMode(mode) {
   _currentMode = mode;
@@ -98942,6 +98952,7 @@ function renderPoseList() {
       const isObj = typeof opt === 'object';
       const text = isObj ? (opt.n || opt.t) : opt;
       const kind = isObj ? opt.s : null;
+      if (_poseKindFilter && kind !== _poseKindFilter) return;
       const d = document.createElement('div');
       const isSel = state.poses.has(i);
       d.className = 'card' + (isSel ? ' sel' : '');
@@ -98980,6 +98991,8 @@ function renderPoseList() {
   const regCount = item.po.length;
   const poseQ = (document.getElementById('poseSearch')?.value || '').trim().toLowerCase();
   const filteredPoses = allPoses.map((opt, i) => ({opt, i})).filter(({opt}) => {
+    const kind = typeof opt === 'object' ? opt.s : null;
+    if (_poseKindFilter && kind !== _poseKindFilter) return false;
     if (!poseQ) return true;
     const text = typeof opt === 'object' ? (opt.n || opt.t) : opt;
     return text.toLowerCase().includes(poseQ);
