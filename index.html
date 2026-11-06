@@ -131525,25 +131525,17 @@ function setMrPreset(preset) {
   if (cmake   && (!cmake.value.trim()   || cmake.value.trim()   === _makeupDefault)) cmake.value   = _makeupDefault;
   if (coutfit && (!coutfit.value.trim() || coutfit.value.trim() === _outfitDefault)) coutfit.value = _outfitDefault;
 
-  const _presetHairs = [0, 2, 4, 6, 7, 20, 25, 31, 41];
-  const _prevHair = _mr.hair;
-  let _newHair;
-  do { _newHair = _presetHairs[Math.floor(Math.random() * _presetHairs.length)]; } while (_newHair === _prevHair && _presetHairs.length > 1);
-  _mr.hair = _newHair;
+  _mr.hair = 'p2';
 
   if (preset === 'general') {
-    const _generalMakeups = ['combo_44', 'combo_43', 'combo_13', 'combo_18', 'combo_9'];
-    const _prevMakeup = _mr.makeup;
-    let _newMakeup;
-    do { _newMakeup = _generalMakeups[Math.floor(Math.random() * _generalMakeups.length)]; } while (_newMakeup === _prevMakeup && _generalMakeups.length > 1);
-    _mr.makeup = _newMakeup;
+    _mr.makeup = 'combo_9';
     _mr.decollete = true;
     _mr.bigBust   = true;
     const _generalPoseDefault = 'поза расслабленная, улыбается, девушка повернута декольте и лицом в камеру';
     if (cpose && (!cpose.value.trim() || cpose.value.trim() === 'поза расслабленная, улыбается, девушка повернута лицом в камеру' || cpose.value.trim() === _generalPoseDefault)) cpose.value = _generalPoseDefault;
     setMrBase('proportions');
   } else if (preset === 'plain') {
-    _mr.makeup    = 'no_makeup';
+    _mr.makeup    = 'korean_natural';
     _mr.decollete = false;
     _mr.bigBust   = false;
     const _plainPoseDefault = 'поза расслабленная, улыбается, девушка повернута лицом в камеру';
@@ -132032,6 +132024,9 @@ function _getMrText(field) {
   if (val === 'p1' || val === 'p2' || val === 'p3' || val === 'p4') return MR_LABELS[field] ? (MR_LABELS[field][val] || null) : null;
   if (field === 'makeup' && val === 'no_makeup') {
     return 'SKIN: completely bare, makeup-free skin — flawless, poreless, perfectly even-toned. The skin looks naturally perfect: smooth, hydrated, luminous from within, with zero visible product. No foundation, no concealer, no powder — only perfect natural skin. EYES: lashes and brows in their natural state — groomed but untouched by product. LIPS: naturally moisturised, soft, bare — the natural lip colour only.';
+  }
+  if (field === 'makeup' && val === 'korean_natural') {
+    return 'Korean natural makeup. SKIN: glass skin — blurred, luminous, lit-from-within finish, cushion or skin-tint coverage, no powder, a translucent dewy radiance with highlight on the nose bridge and cheekbones. EYES: puppy-eye liner placed close to the lower lash line, fluffy straight brows, mascara — youthful and soft. LIPS: soft gradient lip in milky rose or tinted peach, colour concentrated at the centre and fading outward — a blurred, bitten effect.';
   }
   if (field === 'makeup' && typeof val === 'string' && val.startsWith('combo_')) {
     return MK_COMBOS[parseInt(val.split('_')[1])]?.t || null;
