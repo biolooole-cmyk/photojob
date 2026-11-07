@@ -133095,6 +133095,7 @@ const POSE_GROUPS = [
   { label: '🛏 На кровати', key: 'bed',     test: n => /на кровати/i.test(n) },
   { label: '📸 В движении', key: 'motion',  test: n => /в движении|Сексуальная\+движение|Движение —/i.test(n) },
   { label: '🤳 Селфи',     key: 'selfie2', test: (n, k) => /делает селфи/i.test(n) || k === 'selfie' },
+  { label: '🪞 Селфи в зеркале', key: 'mirror_selfie', test: (n, k) => (k === 'selfie' || /делает селфи/i.test(n)) && /зеркал/i.test(n) },
   { label: '👖 Руки в карманах', key: 'pockets', test: n => /в кармане|в карманах/i.test(n) },
 ];
 
