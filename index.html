@@ -133094,7 +133094,7 @@ const POSE_GROUPS = [
   { label: '🧘 На полу',    key: 'floor',   test: n => /на полу/i.test(n) },
   { label: '🛏 На кровати', key: 'bed',     test: n => /на кровати/i.test(n) },
   { label: '📸 В движении', key: 'motion',  test: n => /в движении|Сексуальная\+движение|Движение —/i.test(n) },
-  { label: '🤳 Селфи',     key: 'selfie2', test: n => /делает селфи/i.test(n) },
+  { label: '🤳 Селфи',     key: 'selfie2', test: (n, k) => /делает селфи/i.test(n) || k === 'selfie' },
   { label: '👖 Руки в карманах', key: 'pockets', test: n => /в кармане|в карманах/i.test(n) },
 ];
 
@@ -133586,7 +133586,7 @@ function renderMrPoseTab() {
     const text = isObj ? (opt.n || opt.t) : opt;
     const kind = isObj ? opt.s : null;
     if (q && !q.split(/\s+/).filter(Boolean).every(tok => text.toLowerCase().includes(tok))) return;
-    if (activeGroup && !activeGroup.test(text)) return;
+    if (activeGroup && !activeGroup.test(text, kind)) return;
     filteredPoses.push({opt, i, text, kind});
   });
 
@@ -134586,7 +134586,7 @@ function renderMagPoseTab() {
   allChip.onclick = () => { _mrPoseFilter = null; renderMagPoseTab._offset = 0; renderMagPoseTab(); };
   chipWrap.appendChild(allChip);
   POSE_GROUPS.forEach(g => {
-    let cnt = SPECIAL_POSES.filter(p => g.test(p.n)).length;
+    let cnt = SPECIAL_POSES.filter(p => { const _n = typeof p === 'object' ? (p.n||p.t) : p; const _k = typeof p === 'object' ? p.s : null; return g.test(_n, _k); }).length;
     if (g.key === 'bed') { const _bc = MAG_FLIRT_POSES.find(c => c.key === 'bed'); if (_bc) cnt += _bc.poses.length; }
     if (!cnt) return;
     const chip = document.createElement('button');
@@ -134666,7 +134666,7 @@ function renderMagPoseTab() {
   // ── фильтрация ─────────────────────────────────────────────────────────────
   const q = renderMagPoseTab._q.toLowerCase();
   let poses = SPECIAL_POSES.map((p, i) => ({p, i}));
-  if (_mrPoseFilter) { const g = POSE_GROUPS.find(x => x.key === _mrPoseFilter); if (g) { poses = poses.filter(({p}) => g.test(p.n)); if (_mrPoseFilter === 'bed') { _ensureMagSexyMap(); const _bedCatF2 = MAG_FLIRT_POSES.find(c => c.key === 'bed'); if (_bedCatF2) { let _bidx = 950000; _bedCatF2.poses.forEach((t, i) => { const _bn = i < 300 ? (MAG_FLIRT_TITLES[1006 + i] || ('🛏 Поза ' + (i+1))) : (MAG_SEXY_TITLES[i - 300] || ('🛏 Поза ' + (i+1))); poses.push({p: {n: _bn, t, s: 'sexy'}, i: _bidx++}); }); } } } else if (_mrPoseFilter === 'flirt') { poses = []; let idx = 900000; let _fti = 0;
+  if (_mrPoseFilter) { const g = POSE_GROUPS.find(x => x.key === _mrPoseFilter); if (g) { poses = poses.filter(({p}) => { const _n = typeof p === 'object' ? (p.n||p.t) : p; const _k = typeof p === 'object' ? p.s : null; return g.test(_n, _k); }); if (_mrPoseFilter === 'bed') { _ensureMagSexyMap(); const _bedCatF2 = MAG_FLIRT_POSES.find(c => c.key === 'bed'); if (_bedCatF2) { let _bidx = 950000; _bedCatF2.poses.forEach((t, i) => { const _bn = i < 300 ? (MAG_FLIRT_TITLES[1006 + i] || ('🛏 Поза ' + (i+1))) : (MAG_SEXY_TITLES[i - 300] || ('🛏 Поза ' + (i+1))); poses.push({p: {n: _bn, t, s: 'sexy'}, i: _bidx++}); }); } } } else if (_mrPoseFilter === 'flirt') { poses = []; let idx = 900000; let _fti = 0;
   const _tr_UNUSED = t => t
     .replace(/\bright hand\b/gi,'правая рука').replace(/\bleft hand\b/gi,'левая рука')
     .replace(/\bright arm\b/gi,'правая рука').replace(/\bleft arm\b/gi,'левая рука')
