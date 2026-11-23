@@ -98584,7 +98584,7 @@ const CAMERA_SPACES = {
   ]
 };
 
-const state = {loc:null, makeup:null, outfit:null, hair:null, pose:null, poses:new Set(), camera:null, hands:null, decollete:false, noDecollete:false, bigBust:false, livedIn:false, space:null};
+const state = {loc:null, makeup:null, outfit:null, hair:null, pose:null, poses:new Set(), camera:null, hands:null, decollete:false, noDecollete:false, bigBust:false, curvy:false, livedIn:false, space:null};
 let history = []; // saved prompts (max 7, saved on copy)
 const extras = new Set();
 const photoFeatures = new Set();
@@ -98837,7 +98837,7 @@ function randomize() {
   state.pose   = Math.floor(Math.random() * allPoses.length);
   state.poses  = new Set([state.pose]);
   state.hands  = null;
-  state.decollete = false; state.noDecollete = false; state.bigBust = false;
+  state.decollete = false; state.noDecollete = false; state.bigBust = false; state.curvy = false;
   state.livedIn = false;
   state.space  = null;
   ['loc','makeup','outfit','hair','pose','camera'].forEach(k => {
@@ -99451,7 +99451,7 @@ function selectLoc(i) {
   state.pose   = null;
   state.poses  = new Set();
   state.hands  = null;
-  state.decollete = false; state.noDecollete = false; state.bigBust = false;
+  state.decollete = false; state.noDecollete = false; state.bigBust = false; state.curvy = false;
   state.livedIn = false;
   state.space  = null;
   // state.camera сохраняется (как допы и аксессуары)
@@ -99693,8 +99693,18 @@ function renderOutfitList() {
       bigBustCardR.classList.toggle('sel', state.bigBust);
       updateProgress(); updatePrompt();
     });
+    const curvyCardR = document.createElement('div');
+    curvyCardR.className = 'card decollete-card' + (state.curvy ? ' sel' : '');
+    curvyCardR.style.cssText = 'border-color:#9333ea';
+    curvyCardR.innerHTML = '<div class="card-num" style="color:#9333ea">💜 Фигура — грудь · талия · попа</div>Одежда подчёркивает грудь, тонкую талию и пышную попу';
+    curvyCardR.addEventListener('click', () => {
+      state.curvy = !state.curvy;
+      curvyCardR.classList.toggle('sel', state.curvy);
+      updateProgress(); updatePrompt();
+    });
     el.appendChild(decCardR);
     el.appendChild(bigBustCardR);
+    el.appendChild(curvyCardR);
     el.appendChild(noDecCardR);
     return;
   }
@@ -99772,8 +99782,19 @@ function renderOutfitList() {
     bigBustCard.classList.toggle('sel', state.bigBust);
     updateProgress(); updatePrompt();
   });
+  // ── Фигура — акцент на грудь, талию, попу
+  const curvyCard = document.createElement('div');
+  curvyCard.className = 'card decollete-card' + (state.curvy ? ' sel' : '');
+  curvyCard.style.cssText = 'border-color:#9333ea';
+  curvyCard.innerHTML = '<div class="card-num" style="color:#9333ea">💜 Фигура — грудь · талия · попа</div>Одежда подчёркивает грудь, тонкую талию и пышную попу';
+  curvyCard.addEventListener('click', () => {
+    state.curvy = !state.curvy;
+    curvyCard.classList.toggle('sel', state.curvy);
+    updateProgress(); updatePrompt();
+  });
   el.appendChild(decCard);
   el.appendChild(bigBustCard);
+  el.appendChild(curvyCard);
   el.appendChild(noDecCard);
   el.appendChild(custom);
 }
@@ -100277,7 +100298,8 @@ function _updatePrompt() {
   const finalMakeup = (mk    || '') + (cMakeup ? ` ${cMakeup}` : '');
   const decolleteText = state.decollete ? ' IMPORTANT: The outfit must also feature a very deep neckline or low-cut décolleté that prominently showcases the woman\'s large, beautiful, natural breasts — generous, tasteful but unmistakable cleavage.' : state.noDecollete ? ' IMPORTANT: The outfit must have a fully closed neckline — no cleavage, no décolleté, no low-cut neckline of any kind. High neck, turtleneck, or buttoned-up collar.' : '';
   const bigBustText = state.bigBust ? ' IMPORTANT: The woman has a large, full, natural bust. Her breasts are prominently lifted and showcased in the neckline — full, round, generously displayed. The outfit is fitted to her curves and emphasises her chest naturally and attractively.' : '';
-  const finalOutfit = (ot || '') + (cOutfit ? ` ${cOutfit}` : '') + decolleteText + bigBustText;
+  const curvyText = state.curvy ? ' IMPORTANT: The outfit is perfectly tailored to accentuate her hourglass figure — it hugs her full, round bust, cinches at her narrow waist, and sculpts her voluptuous hips and buttocks. The fabric clings to emphasize the natural curves of her chest, waist, and hips. Every element of the outfit makes her full bust, narrow waist, and round full buttocks the undeniable focal point.' : '';
+  const finalOutfit = (ot || '') + (cOutfit ? ` ${cOutfit}` : '') + decolleteText + bigBustText + curvyText;
   const finalHair   = (hair  || '') + (cHair   ? ` ${cHair}`   : '');
   const finalPose   = (po    || '') + (cPose   ? ` ${cPose}`   : '');
   const finalCamera = (cam   || '') + (cCamera ? ` ${cCamera}` : '');
@@ -101078,7 +101100,7 @@ function deleteHistory(i) {
 function resetAll() {
   state.loc = null; state.makeup = null; state.outfit = null;
   state.hair = null; state.pose = null; state.poses = new Set(); state.camera = null; state.hands = null;
-  state.decollete = false; state.noDecollete = false;
+  state.decollete = false; state.noDecollete = false; state.curvy = false;
   extras.clear();
   accItems.clear();
   activeCat = 'all';
@@ -123090,7 +123112,7 @@ const MR_NEGATIVE = `**Negative prompt:** tattoos, body tattoos, visible tattoos
 const _mr = {
   loc: 'p1', makeup: null, outfit: 'p3', hair: null, pose: null, hands: null,
   baseType: 'proportions', basePhoto: 'p1', faceSource: 'p2', poseSource: 'p1',
-  decollete: false, noDecollete: false, bigBust: false,
+  decollete: false, noDecollete: false, bigBust: false, curvy: false,
 };
 
 const _mrSearch = { makeup: '', hair: '', pose: '', hands: '' };
@@ -134837,6 +134859,12 @@ function renderMrOutfitTab() {
   bigBustFirst.innerHTML = '<div class="card-num" style="color:#c06080">💎 Большая грудь и большое декольте</div>Пышная грудь с глубоким декольте — максимальный акцент';
   bigBustFirst.addEventListener('click', () => { _mr.bigBust = !_mr.bigBust; renderMrOutfitTab(); updatePrompt(); });
   frag.appendChild(bigBustFirst);
+  const curvyCardM = document.createElement('div');
+  curvyCardM.className = 'card decollete-card' + (_mr.curvy ? ' sel' : '');
+  curvyCardM.style.cssText = 'border-color:#9333ea';
+  curvyCardM.innerHTML = '<div class="card-num" style="color:#9333ea">💜 Фигура — грудь · талия · попа</div>Одежда подчёркивает грудь, тонкую талию и пышную попу';
+  curvyCardM.addEventListener('click', () => { _mr.curvy = !_mr.curvy; renderMrOutfitTab(); updatePrompt(); });
+  frag.appendChild(curvyCardM);
   const noDecCardM = document.createElement('div');
   noDecCardM.id = 'noDecCard';
   noDecCardM.className = 'card' + (_mr.noDecollete ? ' sel' : '');
@@ -135147,7 +135175,9 @@ function _updateMrPrompt() {
     : _mr.noDecollete ? 'Fully closed neckline — no cleavage, no décolleté.' : '';
   const bigBustAdd = _mr.bigBust
     ? 'She has a very large, full, natural bust with a deep, generous décolleté — maximum cleavage that is alluring but believable.' : '';
-  const outfitExtras = [decolleteAdd, bigBustAdd].filter(Boolean).join(' ');
+  const curvyAdd = _mr.curvy
+    ? 'The outfit is perfectly tailored to accentuate her hourglass figure — it hugs her full, round bust, cinches at her narrow waist, and sculpts her voluptuous hips and buttocks. The fabric emphasizes her full bust, narrow waist, and round full buttocks as the undeniable focal point.' : '';
+  const outfitExtras = [decolleteAdd, bigBustAdd, curvyAdd].filter(Boolean).join(' ');
   const outfitText = outfitBase ? outfitBase + (outfitExtras ? ' ' + outfitExtras : '') : outfitExtras || null;
 
   const accTexts   = [...accItems].sort().filter(i => ACC[i]).map(i => ACC[i].t);
@@ -135283,7 +135313,7 @@ const _mag = {
   loc: null, makeup: null, outfit: null, hair: null, pose: null, hands: null,
   baseType: 'standard', faceSource: null, bodySource: null, vaginaSource: null, handsSource: null, legsSource: null, poseSource: null, locSource: null, outfitSource: null,
   amateurCam: false,
-  decollete: false, noDecollete: false, bigBust: false,
+  decollete: false, noDecollete: false, bigBust: false, curvy: false,
   nudeAll: false, nudeTop: false, nudeBottom: false, nudeSeeThrough: false,
 };
 
@@ -135577,6 +135607,8 @@ function _updateMagPrompt() {
     : _mag.noDecollete ? 'Fully closed neckline — no cleavage, no décolleté.' : '';
   const bigBustAdd = _mag.bigBust
     ? 'She has a very large, full, natural bust with a deep, generous décolleté — maximum cleavage that is alluring but believable.' : '';
+  const curvyAdd = _mag.curvy
+    ? 'The outfit is perfectly tailored to accentuate her hourglass figure — it hugs her full, round bust, cinches at her narrow waist, and sculpts her voluptuous hips and buttocks. The fabric emphasizes her full bust, narrow waist, and round full buttocks as the undeniable focal point.' : '';
   const VAGINA_DETAIL = '**VULVA SIZE AND SHAPE — CRITICAL REQUIREMENT:** The vulva must be SMALL, NEAT, and DELICATE — compact petite overall size, small neat labia that do not protrude, subtle modest appearance. This is non-negotiable. INTIMATE ANATOMY — MAXIMUM PHOTOREALISTIC DETAIL: Render with 100% anatomical accuracy as if captured in a real photograph. PUBIC AREA: natural mons pubis — smooth (shaved/waxed), soft realistic skin matching body tone. LABIA MAJORA: small, neat, softly rounded outer labia — modest size, barely protruding, close together, soft skin with natural texture, natural color matching body skin tone. LABIA MINORA: small, delicate inner labia — tucked neatly inside, not protruding beyond labia majora, fine delicate edges, natural light pink color, neat and tidy appearance. CLITORAL HOOD: small and subtle — petite, barely noticeable, correctly proportioned to the small overall vulva size. VAGINAL OPENING: anatomically correct, small and neat in appearance. SKIN: soft, smooth, realistic fine skin texture, zero plastic or CGI surface. COLOR: natural skin tone progression — body tone on mons and outer labia, subtle warmer pink on inner labia, consistent with the woman\'s complexion. OVERALL IMPRESSION: a naturally small, neat, and elegant feminine vulva — the kind of petite delicate intimate anatomy that reads as refined and naturally modest. Zero blur, zero airbrushing, zero censoring — 100% photorealistic, same sharpness as the rest of the image.';
   const nudeAdd = _mag.nudeAll
     ? `She is COMPLETELY NUDE — no clothing, no underwear, no fabric of any kind. BREASTS: both fully exposed, beautiful natural shape, soft realistic skin, natural weight and movement, beautiful perfectly shaped nipples — realistic texture, natural color, fully visible. INTIMATE AREA: beautiful feminine vulva fully visible — ${VAGINA_DETAIL} 100% real human body, completely believable anatomy, zero artificial or CGI appearance.`
@@ -135587,7 +135619,7 @@ function _updateMagPrompt() {
     : _mag.nudeSeeThrough
     ? `She is wearing semi-transparent, sheer fabric clothing. Through the translucent material: both breasts clearly visible — natural shape, beautiful perfectly shaped nipples visible through the fabric. Vulva and intimate area visible through sheer lower fabric — ${VAGINA_DETAIL} The see-through effect is beautiful and elegant — fabric clings naturally, light passes through authentically revealing the body underneath. Maximum photorealistic detail of what shows through the fabric.`
     : '';
-  const outfitExtras = [decolleteAdd, bigBustAdd, nudeAdd].filter(Boolean).join(' ');
+  const outfitExtras = [decolleteAdd, bigBustAdd, curvyAdd, nudeAdd].filter(Boolean).join(' ');
   const outfitText = outfitBase ? outfitBase + (outfitExtras ? ' ' + outfitExtras : '') : outfitExtras || null;
 
   const accTexts  = [...accItems].sort().filter(i => ACC[i]).map(i => ACC[i].t);
@@ -135836,6 +135868,12 @@ function renderMagOutfitTab() {
   bigBustFirst.innerHTML = '<div class="card-num" style="color:#c06080">💎 Большая грудь и большое декольте</div>Пышная грудь с глубоким декольте — максимальный акцент';
   bigBustFirst.addEventListener('click', () => { _mag.bigBust = !_mag.bigBust; renderMagOutfitTab(); updatePrompt(); });
   frag.appendChild(bigBustFirst);
+  const curvyCardMag = document.createElement('div');
+  curvyCardMag.className = 'card decollete-card' + (_mag.curvy ? ' sel' : '');
+  curvyCardMag.style.cssText = 'border-color:#9333ea';
+  curvyCardMag.innerHTML = '<div class="card-num" style="color:#9333ea">💜 Фигура — грудь · талия · попа</div>Одежда подчёркивает грудь, тонкую талию и пышную попу';
+  curvyCardMag.addEventListener('click', () => { _mag.curvy = !_mag.curvy; renderMagOutfitTab(); updatePrompt(); });
+  frag.appendChild(curvyCardMag);
 
   const nudeAllCard = document.createElement('div');
   nudeAllCard.className = 'card decollete-card' + (_mag.nudeAll ? ' sel' : '');
