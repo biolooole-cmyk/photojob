@@ -101700,6 +101700,14 @@ function _updatePrompt() {
 
   let prompt = BASE;
 
+  // When a selfie pose is active — strip BASE framing overrides that contradict pose
+  if (isSelfieKind) {
+    prompt = prompt
+      .replace(' — UPPER HALF OF BODY only, from the waist up, never below mid-thigh.', '.')
+      .replace(/\nFRAMING: UPPER HALF OF BODY only[^\n]+\n/, '\n')
+      .replace('THE WOMAN IS ALWAYS LOOKING DIRECTLY INTO THE CAMERA — her gaze is aimed straight at the lens in every image, creating direct eye contact with the viewer. This is non-negotiable. Even when her body is turned sideways, she is glancing toward the camera. Even in candid or motion shots, her eyes find the lens naturally. The only exception is when the selected pose explicitly describes her looking away (e.g. "looks at the horizon", "eyes closed", "looking at something"). In all other cases: eyes to camera, always.', 'THE WOMAN\'S GAZE AND EXPRESSION: follow the pose description exactly — the pose defines her head direction, gaze, and expression.');
+  }
+
   // LOCATION
   prompt += `\n\nLOCATION & BACKGROUND: ${finalLoc}`;
 
@@ -101756,6 +101764,14 @@ function _updatePrompt() {
 
   // FREE CUSTOM — removed
 
+  // SELFIE POSE OVERRIDE — cancels BASE framing rules when selfie/selfie_stick pose selected
+  let selfieOverrideText = null;
+  if (isSelfieKind && finalPose) {
+    const isStick = pObj.s === 'selfie_stick';
+    selfieOverrideText = `SELFIE PHOTO — FRAMING OVERRIDE (this overrides all previous framing rules): This is a ${isStick ? 'selfie-stick' : 'selfie'} photo. The body position, framing, and gaze are defined ENTIRELY by the POSE AND BODY LANGUAGE section — follow it exactly and literally. DO NOT crop to upper body — show whatever portion of the body the pose describes (full body, waist-up, lying, kneeling, etc.). DO NOT force eye contact with camera unless the pose explicitly says so. DO NOT force a smile unless the pose describes it. The pose description overrides every default framing, cropping, gaze, and expression rule in this prompt without exception.`;
+    prompt += `\n\nSELFIE OVERRIDE: ${selfieOverrideText}`;
+  }
+
   // isReady: Локация + Макияж + Одежда — обязательны; Поза, Причёска и Камера — опциональны
   const locOk    = state.loc !== null;
   const makeupOk = state.makeup !== null || cMakeup.length > 0;
@@ -101776,6 +101792,7 @@ function _updatePrompt() {
     ...( handsFinal.length ? [{ label: 'HANDS', text: handsFinal.join('\n\n') }] : [] ),
     { label: 'CAMERA POSITION AND FRAMING',   text: finalCamera || null },
     ...( extrasFinal.length ? [{ label: 'ADDITIONAL PARAMETERS', text: extrasFinal.join('\n\n') }] : [] ),
+    ...( selfieOverrideText ? [{ label: 'SELFIE OVERRIDE', text: selfieOverrideText }] : [] ),
   ].filter(b => b.text);
 
   const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;');
